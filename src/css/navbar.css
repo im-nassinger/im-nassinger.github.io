@@ -1,0 +1,82 @@
+.navbar {
+    width: 100%;
+    height: 6rem;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 var(--horizontal-spacing);
+    background: var(--background-1);
+    overflow: hidden;
+
+    & .logo {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+
+        & .icon {
+            width: 1.8rem;
+            height: 1.8rem;
+            color: var(--theme-1);
+        }
+
+        & .text {
+            font-size: 1.6rem;
+            line-height: 1.6rem;
+            font-weight: 600;
+            color: var(--color-1);
+        }
+    }
+
+    & .buttons {
+        position: relative;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+
+        & .button {
+            height: 100%;
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+
+            & .icon {
+                width: 1.2rem;
+                height: 1.2rem;
+            }
+
+            & .text {
+                font-size: 1.4rem;
+                line-height: 1.4rem;
+                font-weight: 500;
+            }
+
+            & .icon, & .text {
+                color: var(--color-2);
+                transition: color var(--duration) var(--timing);
+            }
+
+            &.active {
+                & .icon {
+                    color: var(--theme-1);
+                }
+                
+                & .text {
+                    color: var(--color-1);
+                }
+            }
+        }
+
+        & .line {
+            position: absolute;
+            left: var(--x);
+            bottom: 0;
+            width: var(--width);
+            height: 0.2rem;
+            background: var(--theme-1);
+            transition:
+                left var(--duration) var(--timing),
+                width var(--duration) var(--timing);
+        }
+    }
+}

@@ -1,12 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Document</title>
+        <title>Nassinger</title>
         
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="./src/css/global.css">
+        <link rel="stylesheet" href="./src/css/themes.css">
+        <link rel="stylesheet" href="./src/css/navbar.css">
+
+        <script src="./src/js/main.js" type="module"></script>
     </head>
-    <body>
-        Hello World
+    <body class="loading" data-theme="dark">
+        <div class="navbar">
+            <div class="logo">
+                <svg class="icon" src="./src/svg/logo.svg" alt="logo">
+                <span class="text">Nassinger</span>
+            </div>
+            <div class="buttons">
+                <button class="button active">
+                    <svg class="icon" src="./src/svg/hashtag.svg" alt="hashtag">
+                    <span class="text">Welcome</span>
+                </button>
+                <button class="button">
+                    <svg class="icon" src="./src/svg/hashtag.svg" alt="hashtag">
+                    <span class="text">Projects</span>
+                </button>
+                <button class="button">
+                    <svg class="icon" src="./src/svg/hashtag.svg" alt="hashtag">
+                    <span class="text">Contact</span>
+                </button>
+                <div class="line"></div>
+            </div>
+        </div>
     </body>
 </html>
