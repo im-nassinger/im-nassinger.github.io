@@ -1,8 +1,8 @@
 export function updateLine(buttonElement) {
     const line = document.querySelector('.navbar .line');
 
-    line.style.setProperty('--x', `${Math.round(buttonElement.offsetLeft)}px`);
-    line.style.setProperty('--width', `${Math.round(buttonElement.offsetWidth)}px`);
+    line.style.setProperty('--x', `${buttonElement.offsetLeft}px`);
+    line.style.setProperty('--width', `${buttonElement.offsetWidth}px`);
 }
 
 export function loadNavbar() {
@@ -18,7 +18,11 @@ export function loadNavbar() {
 
         const oldActiveButton = buttonsElement.querySelector('.active');
 
-        if (oldActiveButton) oldActiveButton.classList.remove('active');
+        if (oldActiveButton) {
+            if (oldActiveButton === buttonElement) return;
+
+            oldActiveButton.classList.remove('active');
+        }
 
         buttonElement.classList.add('active');
 
