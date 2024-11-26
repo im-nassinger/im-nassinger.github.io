@@ -72,7 +72,7 @@
             left: var(--x);
             bottom: 0;
             width: var(--width);
-            height: 0.2rem;
+            height: 0.1rem;
             background: var(--theme-1);
             transition:
                 left var(--duration) var(--timing),
