@@ -4,6 +4,6 @@ import { loadNavbar } from './navbar.js';
 loadAllSVGs();
 
 window.addEventListener('load', () => {
-    loadNavbar();
+    // loadNavbar();
     document.body.removeAttribute('class');
 });
