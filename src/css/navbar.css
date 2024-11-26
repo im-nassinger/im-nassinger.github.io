@@ -1,8 +1,10 @@
 .navbar {
+    position: fixed;
     width: 100%;
     height: 6rem;
     display: flex;
     justify-content: space-between;
+    flex-shrink: 0;
     padding: 0 var(--horizontal-spacing);
     background: var(--background-1);
     overflow: hidden;
