@@ -1,0 +1,325 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+:root {
+    font-size: 10px;
+    --color-1: #161719;
+    --color-2: #262629;
+    --color-3: #757676;
+    --color-4: #ffffff;
+    --color-5: #3199c9;
+    --color-6: #ff521f;
+}
+
+* {
+    font-family: "Inter", sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+    background: none;
+    user-select: none;
+}
+
+body {
+    height: 100dvh;
+    overflow: hidden;
+    background: var(--color-1);
+    color: var(--color-4);
+}
+
+#root {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4rem;
+    justify-content: center;
+    align-items: center;
+    padding: 4rem;
+    overflow: auto;
+}
+
+::-webkit-scrollbar {
+    width: 0.5rem;
+    height: 0.5rem;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-3);
+    border-radius: 1rem;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-4);
+}
+
+.instructions-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    padding: 3rem;
+    border: 0.1rem solid var(--color-2);
+    border-radius: 2rem;
+}
+
+.instructions-wrap.hidden {
+    display: none;
+}
+
+.section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.line {
+    line-height: 2rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--color-3);
+}
+
+.line:before {
+    content: var(--number) ". ";
+    color: var(--color-4);
+}
+
+a {
+    font-weight: 600;
+    color: var(--color-5);
+}
+
+.menu {
+    width: 36rem;
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    border: 0.1rem solid var(--color-2);
+    border-radius: 2rem;
+    z-index: 2;
+}
+
+.title-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: relative;
+}
+
+.title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--color-4);
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.by {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--color-3);
+    transform: translateY(0.1rem);
+}
+
+#show-info-button {
+    --size: 5rem;
+    --icon-size: 1.8rem;
+    position: absolute;
+    right: calc((var(--size) - var(--icon-size)) / 2 * -1);
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+#show-info-button .icon {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    color: var(--color-3);
+    transition: color 0.25s ease-in-out;
+}
+
+#show-info-button:hover .icon {
+    color: var(--color-4);
+}
+
+body:has(.instructions-wrap:not(.hidden)) #show-info-button {
+    display: none;
+}
+
+.textarea-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+textarea {
+    --padding: 2rem;
+    --lines: 3;
+    --line-height: 2rem;
+    --height: calc(var(--padding) * 2 + var(--lines) * var(--line-height));
+    width: 100%;
+    height: var(--height);
+    border: 0.1rem solid var(--color-2);
+    color: var(--color-4);
+    padding: var(--padding);
+    border-radius: 1rem;
+    line-height: var(--line-height);
+    font-size: 1.4rem;
+    resize: none;
+    overflow: hidden;
+    scroll-behavior: smooth;
+}
+
+textarea::placeholder {
+    color: var(--color-3);
+    font-weight: 500;
+}
+
+.inputs {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.input-wrap {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 1.5rem;
+}
+
+.input-wrap .line-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.label {
+    font-size: 1.4rem;
+    font-weight: 500;
+}
+
+.input-wrap .value {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--color-3);
+}
+
+.button {
+    width: fit-content;
+    height: 6rem;
+    padding: 3rem;
+    margin-left: auto;
+    background: color-mix(in srgb, var(--color-5), transparent 80%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    border-radius: 3rem;
+    cursor: pointer;
+}
+
+.button .icon, .button .text {
+    color: color-mix(in srgb, var(--color-4), var(--color-5) 20%);
+}
+
+.button .icon {
+    width: 2.4rem;
+    height: 2.4rem;
+}
+
+.button .text {
+    font-size: 1.4rem;
+    font-weight: 500;
+}
+
+input[type="range"] {
+    overflow: hidden;
+    width: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: var(--color-2);
+    border-radius: 0.5rem;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+    height: 1rem;
+    -webkit-appearance: none;
+    color: var(--color-5);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    width: 1rem;
+    height: 1rem;
+    -webkit-appearance: none;
+    cursor: ew-resize;
+    background: var(--color-4);
+    box-shadow: calc(-100vw - 0.5rem) 0 0 100vw var(--color-5);
+    border-radius: 50%;
+}
+
+input[type="range"]::-moz-range-progress,
+input[type="range"]::-ms-fill-lower {
+    background-color: var(--color-5);
+}
+
+input[type="range"]::-moz-range-track,
+input[type="range"]::-ms-fill-upper {
+    background-color: var(--color-2);
+}
+
+.buttons-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#joint-button {
+    --size: 5rem;
+    --icon-size: 2.4rem;
+    width: var(--size);
+    height: var(--size);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transform: translateX(calc((var(--size) - var(--icon-size)) / 2 * -1));
+}
+
+#joint-button .icon {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    color: var(--color-6);
+    transition: color 0.1s ease-in-out;
+}
+
+#joint-button.disabled .icon {
+    color: var(--color-3);
+}
+
+@media only screen and (max-width: 500px) {
+    #root {
+        padding: 3rem;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    #root {
+        padding: 2rem;
+    }
+}
