@@ -21,7 +21,7 @@ export function ProjectsList() {
     return (
         <ResponsiveList className="projects-container">
             {
-                projectList.map(({ projectName, technologies }) => {
+                projectList.map(({ projectName, technologies, url }) => {
                     const titleI18n = `projects.items.${projectName}.displayName`;
                     const descriptionI18n = `projects.items.${projectName}.description`;
 
@@ -32,6 +32,7 @@ export function ProjectsList() {
                             titleI18n={titleI18n}
                             descriptionI18n={descriptionI18n}
                             technologies={technologies}
+                            url={url}
                         />
                     );
                 })

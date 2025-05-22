@@ -22,6 +22,7 @@ export type ResponsiveListItemProps = {
     children: React.ReactNode;
     ref?: React.Ref<HTMLDivElement>;
     style?: (React.CSSProperties & { [key: string]: any });
+    onClick?: () => void;
 }
 
 export function ResponsiveListItem(props: ResponsiveListItemProps) {
@@ -33,6 +34,7 @@ export function ResponsiveListItem(props: ResponsiveListItemProps) {
             className={clsx('responsive-list-item animate-view', props.className)}
             data-name={props.name}
             style={props.style}
+            onClick={props.onClick}
         >
             {props.children}
         </div>

@@ -14,11 +14,18 @@ export type ProjectCardProps = {
     description?: string;
     descriptionI18n?: string;
     technologies: string[];
+    url?: string;
 }
 
 export const ProjectCard = memo((props: ProjectCardProps) => {
+    const onClick = props.url ? () => window.open(props.url, '_blank') : undefined;
+
     return (
-        <ResponsiveListItem className={clsx('project-card', props.className)} name={props.projectName}>
+        <ResponsiveListItem
+            className={clsx('project-card', props.className)}
+            name={props.projectName}
+            onClick={onClick}
+        >
             <div className="content">
                 <Text className="title" i18n={props.titleI18n}>{props.title}</Text>
                 <Text className="description" i18n={props.descriptionI18n}>{props.description}</Text>
