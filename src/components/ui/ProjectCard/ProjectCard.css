@@ -1,0 +1,93 @@
+.project-card {
+    --border-width: 0.2rem;
+    --border-radius: var(--default-border-radius);
+    position: relative;
+    padding: var(--border-width);
+    border-radius: var(--border-radius);
+    background-color: var(--bg-2);
+    overflow: hidden;
+
+    .content {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 3rem;
+        border-radius: calc(var(--border-radius) - var(--border-width));
+        background-color: var(--bg-2);
+        z-index: 2;
+        transition: background-color var(--fast-duration) var(--easing);
+        overflow: hidden;
+
+        .title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--fg-1);
+            margin-bottom: 1rem;
+        }
+
+        .description {
+            font-size: 1.4rem;
+            line-height: 1.75em;
+            font-weight: 500;
+            color: var(--fg-2);
+            margin-bottom: 2rem;
+        }
+
+        .technologies {
+            display: flex;
+            justify-content: end;
+            flex-wrap: wrap;
+            gap: 1rem 1.5rem;
+            margin-top: auto;
+            margin-left: auto;
+        }
+
+        .icon {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 1.8rem;
+            height: 1.8rem;
+            margin: 1.4rem;
+            color: var(--main-color);
+            transition: transform var(--fast-duration) var(--easing);
+        }
+
+        &:hover .icon {
+            transform: scale(1.2);
+        }
+    }
+
+    .blob,
+    .fakeblob {
+        --size: 50rem;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: var(--size);
+        height: var(--size);
+    }
+
+    .blob {
+        border-radius: 50%;
+        background: radial-gradient(closest-side, var(--main-color) 25%, transparent);
+        z-index: 1;
+        transform: scale(0);
+        scale: calc(1 / var(--animated-scale)) !important;
+    }
+
+    .fakeblob {
+        opacity: 0;
+    }
+
+    &:hover {
+        cursor: pointer;
+
+        .content {
+            background-color: color-mix(in srgb, var(--bg-2), transparent calc(1% + var(--opacity-mult) * 2.5%));
+        }
+    }
+}

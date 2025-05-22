@@ -1,0 +1,94 @@
+{
+    "nav": {
+        "changeLanguage": "Change language",
+        "changeTheme": "Change theme",
+        "buttons": {
+            "start": "start",
+            "about": "about",
+            "projects": "projects",
+            "extras": "extras",
+            "contact": "contact"
+        }
+    },
+    "hero": {
+        "message": "Hello, I am",
+        "role": "A Full-Stack Developer",
+        "description": "Welcome to my portfolio! Here you can check out my projects, my social networks, and my contact information.",
+        "sendMessage": "Send a message",
+        "seeProjects": "See projects"
+    },
+    "about": {
+        "first_paragraph_title": "Welcome to my portfolio!",
+        "first_paragraph_content": "I'm Nassinger, a {{age}}-year-old developer passionate about the world of programming. I believe technology should be used to improve people's lives. That's why I strive to create applications that are intuitive, accessible, and impactful. In this portfolio, you will find a selection of my projects, skills, and contact information.",
+        "second_paragraph_title": "My Skills",
+        "second_paragraph_content": "I have a total of {{codingYears}} years of experience in software development, with a focus on web technologies. I started my journey creating applications with [HTML](https://en.wikipedia.org/wiki/HTML), [CSS](https://en.wikipedia.org/wiki/CSS), [JavaScript](https://en.wikipedia.org/wiki/Javascript), and [Node.js](https://en.wikipedia.org/wiki/Node.js). Later, I learned [TypeScript](https://en.wikipedia.org/wiki/TypeScript), [React](https://en.wikipedia.org/wiki/React_\\(software\\)) and [Deno](https://en.wikipedia.org/wiki/Deno_\\(software\\)). In addition, I have also worked with [Python](https://en.wikipedia.org/wiki/Python_\\(programming_language\\)) and [Lua](https://en.wikipedia.org/wiki/Lua)."
+    },
+    "projects": {
+        "title": "Projects",
+        "description": "Here is a list of some of my projects and experiments.",
+        "items": {
+            "2d-raycaster": {
+                "displayName": "2D Raycaster",
+                "description": "An implementation of a 2D raycaster in the style of DOOM / Wolfenstein 3D."
+            },
+            "calculator": {
+                "displayName": "Calculator",
+                "description": "A simple web calculator application."
+            },
+            "chatbot": {
+                "displayName": "Web Chatbot",
+                "description": "A simple offline chatbot with custom commands."
+            },
+            "portfolio": {
+                "displayName": "My Portfolio",
+                "description": "The website you're on right now :)"
+            },
+            "pix-client": {
+                "displayName": "pix-client",
+                "description": "A lib that makes it easier to use Mercado Pago’s API for PIX payments. Available on NPM."
+            },
+            "editable-console": {
+                "displayName": "editable-console",
+                "description": "A logging lib to dynamically modify console output."
+            }
+        },
+        "more_soon": "More projects coming soon!"
+    },
+    "extras": {
+        "title": "Extras",
+        "description": "Here is some additional information about me.",
+        "items": {
+            "unoesc": {
+                "title": "Computer Engineering",
+                "subtitle": "Teaching Assistant in the Algorithms and Programming Logic course (2025)",
+                "description": "I am currently studying Computer Engineering at [Unoesc](https://www.unoesc.edu.br/campus/chapeco/), and I have recently taken on the role of teaching assistant in the Algorithms and Programming Logic course. Since then, I have been helping students with practical activities and clarifying doubts related to the subject. This experience has significantly contributed to the development of my communication and teamwork skills."
+            },
+            "creative-coding": {
+                "title": "Creative Coding",
+                "subtitle": "Using code as a form of creative expression (2023)",
+                "description": "I took courses in [creative coding](https://www.youtube.com/watch?v=EoL5R_0h9xk), where I learned to use code as a tool to create visuals, graphics, and interactive experiences. I know how to develop generative visual pieces, exploring motion, interactivity, and real-time changes. I enjoy working with code in an experimental way, blending logic and creativity to build visual compositions."
+            }
+        }
+    },
+    "contact": {
+        "title": "Contact me",
+        "description": "Feel free to send me a message :)",
+        "message_form": {
+            "name_title": "Name / E-mail",
+            "name_placeholder": "Enter your name or e-mail...",
+            "message_title": "Message",
+            "message_placeholder": "Enter your message...",
+            "submit": "Send message",
+            "missing_fields": "Please fill in all fields.",
+            "sending_message": "Sending message...",
+            "success": "Message sent successfully!",
+            "error": "An error occurred while sending the message. Please try again later."
+        }
+    },
+    "footer": {
+        "text": [
+            "Made by Nassinger, with",
+            "and"
+        ]
+    }
+}

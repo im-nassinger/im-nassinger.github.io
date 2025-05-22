@@ -1,0 +1,8 @@
+.app {
+    min-width: 150px;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}

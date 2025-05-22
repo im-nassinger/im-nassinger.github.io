@@ -1,0 +1,22 @@
+.language-flag {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+
+    .language-icon {
+        flex-shrink: 0;
+        width: 2.4rem;
+        height: 2.4rem;
+        transition: color var(--fast-duration) var(--easing);
+    }
+
+    .flag-icon {
+        width: 1.2rem;
+        height: 1.2rem;
+        position: absolute;
+        right: 0;
+        top: 0;
+        margin: -0.5rem;
+    }
+}

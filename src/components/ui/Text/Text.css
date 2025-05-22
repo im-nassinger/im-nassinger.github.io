@@ -1,0 +1,19 @@
+.text {
+    width: fit-content;
+    line-height: 1.5em;
+
+    &:not(.no-ellipsis) {
+        max-width: 100%;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    @media (max-width: 300px) {
+        width: 100%;
+        text-align: center !important;
+    }
+
+    @media (max-width: 200px) {
+        word-break: break-all !important;
+    }
+}

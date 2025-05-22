@@ -1,0 +1,18 @@
+.tag {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.75825em;
+
+    &:before,
+    &:after {
+        color: var(--main-color);
+        transition: color var(--fast-duration) var(--easing);
+    }
+
+    &:before {
+        content: '<';
+    }
+
+    &:after {
+        content: '/>';
+    }
+}

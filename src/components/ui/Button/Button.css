@@ -1,0 +1,40 @@
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: var(--fg-1);
+
+    .icons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: var(--regular-icon-size);
+        height: var(--regular-icon-size);
+        position: relative;
+
+        .icon {
+            position: absolute;
+            transition-property: transform, opacity, color;
+            transition-duration: var(--fast-duration);
+            transition-timing-function: var(--easing);
+        }
+
+        .icon:not(.active) {
+            opacity: 0;
+            transform: scale(0);
+        }
+    }
+
+    .icon {
+        width: var(--regular-icon-size);
+        height: var(--regular-icon-size);
+    }
+
+    .icon,
+    .text {
+        transition: color var(--fast-duration) var(--easing);
+    }
+}

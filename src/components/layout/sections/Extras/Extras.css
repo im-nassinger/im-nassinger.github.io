@@ -1,0 +1,14 @@
+.extras {
+    display: flex;
+
+    .extras-container {
+        display: flex;
+        flex-wrap: wrap;
+        --items-per-line: 1 !important;
+        --items-gap: 5rem !important;
+
+        @media (max-width: 1200px) {
+            --items-per-line: 1 !important;
+        }
+    }
+}

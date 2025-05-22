@@ -1,0 +1,139 @@
+.about {
+    display: flex;
+    flex-direction: column;
+
+    .about-container {
+        display: flex;
+        justify-content: center;
+        gap: 8rem;
+        height: fit-content;
+
+        .image-and-links {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+            width: fit-content;
+            height: fit-content;
+            max-width: 100%;
+
+            .image-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+
+                .image-overlay {
+                    display: flex;
+                    align-items: end;
+                    position: relative;
+                    width: 100dvw;
+                    max-width: 20rem;
+                    aspect-ratio: 1;
+                    background: white;
+                    border-radius: var(--default-border-radius);
+
+                    &:before, &:after {
+                        content: '';
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        width: 100%;
+                        height: 100%;
+                        pointer-events: none;
+                        border-radius: var(--default-border-radius);
+                    }
+
+                    &:before {
+                        /* background-color: var(--main-color); */
+                        z-index: 0;
+                    }
+
+                    img {
+                        position: absolute;
+                        width: 100%;
+                        z-index: 1;
+                        transform: translateY(0.1rem);
+                        border-radius: var(--default-border-radius);
+                    }
+
+                    &:after {
+                        background-color: color-mix(in srgb, var(--main-color), transparent 97.5%);
+                        z-index: 2;
+                    }
+                }
+            }
+        }
+
+        .texts-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5rem;
+            margin-bottom: auto;
+
+            .text-item {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 2rem;
+                transform: translateY(-0.5rem);
+
+                &.animate-view {
+                    transform: translateY(calc(2.5rem - 0.5rem)) scale(0.95);
+                }
+
+                .title {
+                    font-size: 2.6rem;
+                    font-weight: 800;
+                    color: var(--fg-1);
+                    
+                    &, .text {
+                        line-height: 1.25em;
+                    }
+
+                    .twemoji {
+                        width: 2.4rem;
+                        height: 2.4rem;
+                 
+                 
+                        /* God forgive me. but translateY would not fit here, as it changes the base line (noticeable on text selection). */
+                        margin-bottom: -0.25rem;
+                    }
+                }
+
+                .content {
+                    width: 100%;
+                    font-size: 1.6rem;
+                    font-weight: 500;
+                    text-align: justify;
+                    color: var(--fg-2);
+
+                    a {
+                        font-family: 'Roboto Mono', monospace;
+                        color: var(--main-color);
+                        text-decoration: none;
+                        font-size: 1.4rem;
+                        font-weight: 800;
+                    }
+                }
+            }
+        }
+
+        @media (max-width: 700px) {
+            flex-direction: column;
+            align-items: center;
+    
+            /* .text-item {
+                .content {
+                    text-align: left !important;
+                }
+            } */
+
+            .image-overlay {
+                max-width: 100% !important;
+            }
+        }
+    }
+}

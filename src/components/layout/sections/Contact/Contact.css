@@ -1,0 +1,77 @@
+.contact {
+    .section-content {
+        display: flex;
+        justify-content: center;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 4rem;
+
+        @media (max-width: 1000px) {
+            flex-direction: column;
+
+            .send-message-container,
+            .message-form {
+                width: 100%;
+            }
+        }
+    }
+
+    .info-and-links-container,
+    .send-message-container {
+        width: fit-content;
+        height: fit-content;
+        max-width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 4rem;
+    }
+
+    .info-and-links-container {
+        margin-right: auto;
+        margin-bottom: 6rem;
+    }
+
+    .message-form {
+        display: flex;
+        flex-direction: column;
+        gap: 4rem;
+        width: 35rem;
+
+        .entry {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+
+            .label {
+                font-size: 2rem;
+                font-weight: 600;
+                color: var(--fg-1);
+            }
+
+            .generic-input {
+                width: 100%;
+                background: var(--bg-2);
+                border-radius: var(--default-border-radius);
+
+                .input {
+                    width: 100%;
+                    padding: 2rem;
+                    font-size: 1.6rem;
+                    line-height: 1.5em;
+                    font-weight: 500;
+                    color: var(--fg-1);
+                    text-overflow: ellipsis;
+    
+                    &::placeholder {
+                        color: var(--fg-3);
+                    }
+                }
+            }
+        }
+
+        textarea {
+            resize: none;
+            height: 15rem;
+        }
+    }
+}

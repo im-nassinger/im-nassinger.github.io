@@ -1,0 +1,163 @@
+.hero {
+    width: 100%;
+    height: 100dvh;
+    display: flex;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+    background: linear-gradient(to bottom, var(--bg-1) 50%, var(--bg-2)) !important;
+
+    &:not(.chrome-version) {
+        background: var(--bg-1) !important;
+    }
+
+    .section-content {
+        padding-top: var(--navbar-height) !important;
+        padding-bottom: calc(var(--navbar-height) / 2) !important;
+    }
+
+    #physics-canvas {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    .left-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: auto 0;
+        gap: 4rem;
+        width: 100%;
+        max-width: 52.5rem;
+        height: fit-content;
+        flex-shrink: 0;
+
+        .texts {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+
+            .message {
+                font-size: clamp(1rem, 0.33rem + 2.22vw, 2rem);
+                font-weight: 500;
+                color: var(--main-color);
+            }
+
+            .name {
+                padding-top: 1rem;
+                line-height: 1em;
+                font-size: clamp(4rem, 1.33rem + 8.89vw, 8rem);
+                font-weight: 800;
+                color: var(--fg-1);
+                transform: translateX(-0.05em);
+                overflow-wrap: anywhere;
+            }
+
+            .role {
+                font-size: clamp(1.3rem, 0.43rem + 2.89vw, 2.6rem);
+                font-weight: 800;
+                color: var(--fg-2);
+                word-break: break-word !important;
+            }
+
+            .description {
+                font-size: clamp(0.9rem, 0.3rem + 2vw, 1.8rem);
+                font-weight: 500;
+                color: var(--fg-2);
+                line-height: 1.25em;
+                height: auto;
+                transform-origin: left;
+                overflow: hidden;
+                interpolate-size: allow-keywords;
+                transition-property: height, margin, transform, opacity;
+                transition-duration: var(--fast-duration);
+                transition-timing-function: var(--easing);
+            }
+        }
+
+        .buttons {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: start;
+            gap: 3rem;
+            margin-right: auto;
+        }
+    }
+
+    .right-container {
+        display: flex;
+    }
+}
+
+.send-message-btn,
+.see-projects-btn {
+    height: 6rem;
+    padding: clamp(1rem, 5vw, 3rem);
+    border-radius: var(--default-border-radius);
+    font-weight: 600;
+
+    .text {
+        line-height: 1em;
+    }
+}
+
+.send-message-btn {
+    position: relative;
+    background-color: var(--main-color);
+    color: var(--bg-1) !important;
+    box-shadow: 0 0 3rem color-mix(in srgb, var(--main-color), transparent 88%);
+
+    transition-property: transform, box-shadow;
+    transition-duration: var(--fast-duration);
+    transition-timing-function: var(--easing);
+
+    &:hover {
+        transform: translateY(-0.2rem);
+        box-shadow: 0 0 4rem color-mix(in srgb, var(--main-color), transparent 80%);
+    }
+}
+
+.see-projects-btn {
+    background-color: color-mix(in srgb, var(--main-color), var(--bg-1) calc(98% - var(--opacity-mult) * 4%));
+    backdrop-filter: blur(4rem);
+    color: var(--main-color);
+
+    transition-property: transform, background-color;
+    transition-duration: var(--fast-duration);
+    transition-timing-function: var(--easing);
+
+    &:hover {
+        transform: translateY(-0.2rem);
+        background-color: color-mix(in srgb, var(--main-color), var(--bg-1) calc(98% - var(--opacity-mult) * 6.5%));
+    }
+}
+
+@media (max-width: 400px) {
+    .hero {
+        .buttons {
+            margin: 0 !important;
+
+            .button {
+                width: 100% !important;
+            }
+        }
+    }
+}
+
+@media (max-width: 750px) {
+    .hero {
+        .description {
+            height: 0 !important;
+            margin-top: -2rem;
+            transform: scale(0);
+            opacity: 0;
+        }
+    }
+}

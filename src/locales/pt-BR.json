@@ -1,0 +1,94 @@
+{
+    "nav": {
+        "changeLanguage": "Mudar idioma",
+        "changeTheme": "Mudar tema",
+        "buttons": {
+            "start": "início",
+            "about": "sobre",
+            "projects": "projetos",
+            "extras": "extras",
+            "contact": "contato"
+        }
+    },
+    "hero": {
+        "message": "Olá, eu sou",
+        "role": "Um Desenvolvedor Full-Stack",
+        "description": "Bem-vindo ao meu portfólio! Aqui você pode conferir meus projetos, minhas redes-sociais e minhas informações de contato.",
+        "sendMessage": "Enviar mensagem",
+        "seeProjects": "Ver projetos"
+    },
+    "about": {
+        "first_paragraph_title": "Bem-vindo ao meu portfólio!",
+        "first_paragraph_content": "Eu sou Nassinger, um desenvolvedor de {{age}} anos apaixonado pelo mundo da programação. Acredito que a tecnologia deve ser usada para melhorar a vida das pessoas. Por isso, busco criar aplicações que sejam intuitivas, acessíveis e impactantes. Neste portfólio, você encontrará uma seleção dos meus projetos, habilidades e informações de contato.",
+        "second_paragraph_title": "Minhas habilidades",
+        "second_paragraph_content": "Tenho um total de {{codingYears}} anos de experiência em desenvolvimento de software, com foco em tecnologias web. Iniciei minha jornada criando aplicações com [HTML](https://en.wikipedia.org/wiki/HTML), [CSS](https://en.wikipedia.org/wiki/CSS), [JavaScript](https://en.wikipedia.org/wiki/Javascript) e [Node.js](https://en.wikipedia.org/wiki/Node.js). Depois, aprendi [TypeScript](https://en.wikipedia.org/wiki/TypeScript), [React](https://en.wikipedia.org/wiki/React_\\(software\\)) e [Deno](https://en.wikipedia.org/wiki/Deno_\\(software\\)). Além disso, já trabalhei com [Python](https://en.wikipedia.org/wiki/Python_\\(programming_language\\)) e [Lua](https://en.wikipedia.org/wiki/Lua)."
+    },
+    "projects": {
+        "title": "Projetos",
+        "description": "Aqui vai uma lista de alguns dos meus projetos e experimentos.",
+        "items": {
+            "2d-raycaster": {
+                "displayName": "Raycaster 2D",
+                "description": "Uma implementação de um raycaster 2D estilo DOOM / Wolfenstein 3D."
+            },
+            "calculator": {
+                "displayName": "Calculadora",
+                "description": "Uma aplicação web simples de calculadora."
+            },
+            "chatbot": {
+                "displayName": "Chatbot Web",
+                "description": "Um chatbot offline simples com comandos personalizados."
+            },
+            "portfolio": {
+                "displayName": "Meu Portfólio",
+                "description": "O website em que você está agora :)"
+            },
+            "pix-client": {
+                "displayName": "pix-client",
+                "description": "Uma lib para facilitar o uso da API do mercado pago para pagamentos via PIX. Disponível no NPM."
+            },
+            "editable-console": {
+                "displayName": "editable-console",
+                "description": "Uma lib de logs para modificar a saída do console dinamicamente."
+            }
+        },
+        "more_soon": "Mais projetos em breve!"
+    },
+    "extras": {
+        "title": "Extras",
+        "description": "Aqui estão algumas informações adicionais sobre mim.",
+        "items": {
+            "unoesc": {
+                "title": "Engenharia da Computação",
+                "subtitle": "Monitoria na disciplina de Algoritmos e Lógica de Programação (2025)",
+                "description": " Estou cursando Engenharia da Computação na [Unoesc](https://www.unoesc.edu.br/campus/chapeco/) e recentemente assumi a monitoria em Algoritmos e Lógica de Programação. Desde então, venho auxiliando os alunos em atividades práticas e esclarecendo dúvidas relacionadas à matéria. Essa experiência tem contribuído significativamente para o desenvolvimento das minhas habilidades de comunicação e trabalho em equipe."
+            },
+            "creative-coding": {
+                "title": "Programação Criativa",
+                "subtitle": "Usando código como meio de expressão artística (2023)",
+                "description": "Fiz cursos de [programação criativa](https://www.youtube.com/watch?v=EoL5R_0h9xk), onde aprendi a usar o código como ferramenta para criar visuais, gráficos e experiências interativas. Eu sei desenvolver peças visuais generativas, explorando movimento, interatividade e formas que mudam em tempo real. Gosto de trabalhar com código de forma experimental, misturando lógica e criatividade para criar composições visuais."
+            }
+        }
+    },
+    "contact": {
+        "title": "Entre em contato",
+        "description": "Fique à vontade para me enviar uma mensagem :)",
+        "message_form": {
+            "name_title": "Nome / E-mail",
+            "name_placeholder": "Digite seu nome ou e-mail...",
+            "message_title": "Mensagem",
+            "message_placeholder": "Digite sua mensagem...",
+            "submit": "Enviar mensagem",
+            "missing_fields": "Por favor, preencha todos os campos.",
+            "sending_message": "Enviando mensagem...",
+            "success": "Mensagem enviada com sucesso!",
+            "error": "Ocorreu um erro ao enviar a mensagem. Por favor, tente novamente mais tarde."
+        }
+    },
+    "footer": {
+        "text": [
+            "Feito por Nassinger, com",
+            "e"
+        ]
+    }
+}

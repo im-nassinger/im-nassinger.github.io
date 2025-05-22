@@ -1,0 +1,23 @@
+.responsive-list {
+    --items-per-line: 3;
+    --items-gap: 4rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: var(--items-gap);
+
+    @media (max-width: 1250px) {
+        --items-per-line: 2;
+    }
+
+    @media (max-width: 850px) {
+        --items-per-line: 1;
+    }
+
+    .responsive-list-item {
+        --x: var(--items-per-line, 1);
+        --gap: var(--items-gap, 0rem);
+        width: 100%;
+        max-width: calc(100% / var(--x) - var(--gap) + var(--gap) / var(--x));
+    }
+}

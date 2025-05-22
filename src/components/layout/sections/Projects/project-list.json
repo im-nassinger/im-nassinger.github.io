@@ -1,0 +1,54 @@
+[
+    {
+        "projectName": "2d-raycaster",
+        "technologies": [
+            "html",
+            "css",
+            "ts"
+        ],
+        "url": ""
+    },
+    {
+        "projectName": "calculator",
+        "technologies": [
+            "html",
+            "css",
+            "ts"
+        ],
+        "url": ""
+    },
+    {
+        "projectName": "chatbot",
+        "technologies": [
+            "html",
+            "css",
+            "js"
+        ],
+        "url": "https://github.com/im-nassinger/simple-chat"
+    },
+    {
+        "projectName": "portfolio",
+        "technologies": [
+            "react",
+            "ts",
+            "css"
+        ],
+        "url": "https://github.com/im-nassinger/im-nassinger.github.io"
+    },
+    {
+        "projectName": "pix-client",
+        "technologies": [
+            "ts",
+            "node"
+        ],
+        "url": "https://github.com/im-nassinger/pix-client"
+    },
+    {
+        "projectName": "editable-console",
+        "technologies": [
+            "ts",
+            "deno"
+        ],
+        "url": "https://github.com/im-nassinger/editable-console"
+    }
+]

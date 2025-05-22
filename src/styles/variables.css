@@ -1,0 +1,94 @@
+:root {
+    font-size: 62.5%;
+}
+
+body {
+    --min-vw: 750;
+    --max-vw: 5000;
+    --min-p: 6vw;
+    --max-p: 30vw;
+
+    --t: clamp(0, calc((var(--vw) - var(--min-vw)) / (var(--max-vw) - var(--min-vw))), 1);
+    
+    /* here I'm linearly interpolating between the min and max padding, based on the current viewport width */
+    /* a built-in lerp() function would be so nice :( */
+    --app-side-padding: calc(var(--min-p) + (var(--max-p) - var(--min-p)) * var(--t));
+
+    --navbar-height: calc((12.5dvh + 8rem) / 2);
+    --sidebar-width: 30rem;
+    --item-side-padding: 2dvw;
+    --regular-icon-size: 2.4rem;
+    --fast-duration: 0.2s;
+    --slow-duration: 0.4s;
+    --easing: cubic-bezier(0.4, 0, 0.2, 1);
+    --default-border-radius: 0.75rem;
+
+    --main-color: hsl(var(--hue, 180), 60%, 52%);
+
+    --bg-1: color-mix(in srgb, var(--bg-1-rgb), var(--main-color) 1.75%);
+    --bg-2: color-mix(in srgb, var(--bg-2-rgb), var(--main-color) 1.75%);
+    --bg-3: color-mix(in srgb, var(--bg-3-rgb), var(--main-color) 1.75%);
+    --fg-1: color-mix(in srgb, var(--fg-1-rgb), var(--main-color) 7.5%);
+    --fg-2: color-mix(in srgb, var(--fg-2-rgb), var(--main-color) 7.5%);
+    --fg-3: color-mix(in srgb, var(--fg-3-rgb), var(--main-color) 7.5%);
+
+    --color-html: #f0522b;
+    --color-css: #663399;
+    --color-js: #f0dc4e;
+    --color-ts: #287ad3;
+    --color-react: #2eceeb;
+    --color-deno: #ffffff;
+    --color-node: #75cc3b;
+
+    &[data-theme="dark"] {
+        --bg-1-rgb: rgb(7, 7, 7);
+        --bg-2-rgb: rgb(10, 10, 10);
+        --bg-3-rgb: rgb(15, 15, 15);
+        --fg-1-rgb: rgb(225, 225, 225);
+        --fg-2-rgb: rgb(150, 150, 150);
+        --fg-3-rgb: rgb(100, 100, 100);
+        --opacity-mult: 1;
+    }
+
+    &[data-theme="light"] {
+        --bg-1-rgb: rgb(250, 250, 250);
+        --bg-2-rgb: rgb(240, 240, 240);
+        --bg-3-rgb: rgb(225, 225, 225);
+        --fg-1-rgb: rgb(30, 30, 30);
+        --fg-2-rgb: rgb(75, 75, 75);
+        --fg-3-rgb: rgb(125, 125, 125);
+        --opacity-mult: 4;
+    }
+
+    @media (max-height: 200px) {
+        --navbar-height: 3rem;
+    }
+}
+
+.html {
+    color: var(--color-html) !important;
+}
+
+.css {
+    color: var(--color-css) !important;
+}
+
+.js {
+    color: var(--color-js) !important;
+}
+
+.ts {
+    color: var(--color-ts) !important;
+}
+
+.react {
+    color: var(--color-react) !important;
+}
+
+.deno {
+    color: var(--color-deno) !important;
+}
+
+.node {
+    color: var(--color-node) !important;
+}

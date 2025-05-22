@@ -1,0 +1,16 @@
+.projects {
+    display: flex;
+
+    .more-soon {
+        margin: 0 auto;
+        font-size: 1.4rem;
+        font-weight: 500;
+        color: var(--fg-3);
+        opacity: 0.5;
+        margin-top: 2rem;
+    }
+
+    .projects-container {
+        --items-gap: 3rem !important;
+    }
+}
