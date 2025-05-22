@@ -1,0 +1,137 @@
+@import './fonts.css';
+
+* {
+    font-family: 'Josefin Sans', sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    outline: none;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    width: 100dvw;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: var(--bg-1);
+
+    &[data-loading],
+    &[data-loading] * {
+        transition-duration: 0s !important;
+        animation-duration: 0s !important;
+        pointer-events: none;
+        visibility: hidden;
+    }
+
+    &[data-changing-theme],
+    &[data-changing-theme] *:not(.Toastify *) {
+        transition-property: none !important;
+        transition-duration: 0s !important;
+        animation-duration: 0s !important;
+    }
+
+    &::selection {
+        background: var(--main-color);
+        color: white;
+        text-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.2);
+    }
+
+    &.hovering-body {
+        user-select: none;
+    }
+}
+
+#root {
+    width: 100%;
+    height: 100%;
+}
+
+svg {
+    flex-shrink: 0;
+}
+
+svg * {
+    pointer-events: none;
+}
+
+img {
+    user-select: none;
+}
+
+button {
+    cursor: pointer;
+}
+
+::-webkit-scrollbar {
+    width: 0.2rem;
+    height: 0.2rem;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--main-color);
+}
+
+:-webkit-autofill {
+    transition: background-color 0s 0s;
+    transition-delay: calc(infinity * 1s);
+    -webkit-text-fill-color: var(--fg-1) !important;
+}
+
+.animate-view {
+    --animated-scale: 0.95;
+    transform: translateY(2rem) scale(var(--animated-scale));
+    transition-property: transform, opacity;
+    transition-duration: 0.2s;
+    transition-timing-function: var(--easing);
+
+    &.in-view {
+        transform: none !important;
+        opacity: 1 !important;
+    }
+}
+
+:root {
+    --toastify-toast-offset: 2rem;
+    --toastify-color-success: #4caf50 !important;
+    --toastify-color-warning: #ff9800 !important;
+    --toastify-color-error: #f44336 !important;
+}
+
+.Toastify__toast {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 500;
+    padding: 2.5rem;
+    box-shadow: none;
+    background: color-mix(in srgb, var(--bg-3), transparent 25%);
+    backdrop-filter: blur(2rem);
+    color: var(--fg-1);
+    margin-bottom: 0;
+    margin-top: 1.4rem;
+
+    .Toastify__close-button {
+        top: 0;
+        right: 0;
+        display: flex;
+        padding: 1rem;
+        padding-left: 0.5rem;
+        padding-bottom: 0.5rem;
+        color: var(--fg-1);
+
+        svg {
+            width: 1.6rem;
+            height: 1.6rem;
+        }
+    }
+}
