@@ -1,0 +1,14 @@
+<svg width="300" height="100" viewBox="0 0 300 100" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="60" cy="50" r="30" fill="white" transform-origin="60 50" opacity="0.3" transform="scale(0.75)">
+        <animate attributeName="opacity" from="0.3" to="1" values="0.3;1;0.3" keyTimes="0;0.3;1" keySplines="0.25 0.1 0.25 1; 0.25 0.1 0.25 1" calcMode="spline" dur="1s" repeatCount="indefinite" begin="0s"/>
+        <animateTransform attributeName="transform" type="scale" from="0.75" to="1" values="0.75;1;0.75" keyTimes="0;0.5;1" keySplines="0.25 0.1 0.25 1; 0.25 0.1 0.25 1" calcMode="spline" dur="1s" repeatCount="indefinite" begin="0s" additive="replace" />
+    </circle>
+    <circle cx="150" cy="50" r="30" fill="white" transform-origin="150 50" opacity="0.3" transform="scale(0.75)">
+        <animate attributeName="opacity" from="0.3" to="1" values="0.3;1;0.3" keyTimes="0;0.3;1" keySplines="0.25 0.1 0.25 1; 0.25 0.1 0.25 1" calcMode="spline" dur="1s" repeatCount="indefinite" begin="0.25s"/>
+        <animateTransform attributeName="transform" type="scale" from="0.75" to="1" values="0.75;1;0.75" keyTimes="0;0.5;1" keySplines="0.25 0.1 0.25 1; 0.25 0.1 0.25 1" calcMode="spline" dur="1s" repeatCount="indefinite" begin="0.25s" additive="replace" />
+    </circle>
+    <circle cx="240" cy="50" r="30" fill="white" transform-origin="240 50" opacity="0.3" transform="scale(0.75)">
+        <animate attributeName="opacity" from="0.3" to="1" values="0.3;1;0.3" keyTimes="0;0.3;1" keySplines="0.25 0.1 0.25 1; 0.25 0.1 0.25 1" calcMode="spline" dur="1s" repeatCount="indefinite" begin="0.5s"/>
+        <animateTransform attributeName="transform" type="scale" from="0.75" to="1" values="0.75;1;0.75" keyTimes="0;0.5;1" keySplines="0.25 0.1 0.25 1; 0.25 0.1 0.25 1" calcMode="spline" dur="1s" repeatCount="indefinite" begin="0.5s" additive="replace" />
+    </circle>
+</svg>
