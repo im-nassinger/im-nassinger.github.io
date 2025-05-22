@@ -5,6 +5,9 @@ import svgr from 'vite-plugin-svgr';
 import tsconfig from './tsconfig.app.json' with { type: 'json' };
 
 export default defineConfig({
+    build: {
+        emptyOutDir: false
+    },
     plugins: [
         react(),
         svgr()
