@@ -20,12 +20,25 @@ export type ButtonProps = {
 export function Button(props: ButtonProps) {
     const [startedDown, setStartedDown] = useState(false);
 
-    const onMouseDown = () => setStartedDown(true);
+    const onMouseDown = (event: React.MouseEvent) => {
+        event.preventDefault();
+
+        setStartedDown(true);
+    };
 
     const onMouseUp = (event: React.MouseEvent) => {
-        if (startedDown && props.onClick) props.onClick(event);
-
         setStartedDown(false);
+        
+        // here I'm preventing a click if the mouse is not over the button anymore:
+        const actualTarget = document.elementFromPoint(event.clientX, event.clientY);
+        
+        const isActualTarget = (
+            actualTarget === event.currentTarget ||
+            event.currentTarget.contains(actualTarget)
+        );
+        
+        if (!isActualTarget) return;
+        if (startedDown && props.onClick) props.onClick(event);
     };
 
     return (
@@ -34,7 +47,6 @@ export function Button(props: ButtonProps) {
             className={clsx('button', props.className)}
             onMouseDown={onMouseDown}
             onMouseUp={onMouseUp}
-            onMouseLeave={() => setStartedDown(false)}
             type={props.type}
         >
             {props.icon && <props.icon className="icon" />}
