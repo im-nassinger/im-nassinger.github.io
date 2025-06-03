@@ -34,6 +34,7 @@ export function Button(props: ButtonProps) {
             className={clsx('button', props.className)}
             onMouseDown={onMouseDown}
             onMouseUp={onMouseUp}
+            onMouseLeave={() => setStartedDown(false)}
             type={props.type}
         >
             {props.icon && <props.icon className="icon" />}
