@@ -10,6 +10,7 @@ export const GitLogo = memo((props: Partial<LogoProps>) => {
             name="git"
             image={{ src: Git }}
             shapeProps={{ type: 'polygon', verticeList }}
+            bodyProps={{ angle: Math.PI / 4 }}
         />
     )
 });

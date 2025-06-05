@@ -15,8 +15,8 @@ export type LogoProps = {
         height?: number;
         attributes?: Attributes;
     };
-    bodyProps?: ComponentProps<typeof Body>;
-    fixtureProps?: ComponentProps<typeof Fixture>;
+    bodyProps?: Partial<ComponentProps<typeof Body>>;
+    fixtureProps?: Partial<ComponentProps<typeof Fixture>>;
     shapeProps: {
         type: 'circle' | 'polygon' | 'box';
         radius?: number;
