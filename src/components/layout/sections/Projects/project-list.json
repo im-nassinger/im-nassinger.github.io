@@ -1,5 +1,23 @@
 [
     {
+        "projectName": "Atividade: interface twitter",
+        "technologies": [
+            "html",
+            "css",
+            "js"
+        ],
+        "url": "https://nassinger.com/projects/twitter"
+    },
+    {
+        "projectName": "Atividade: tecnologias web",
+        "technologies": [
+            "html",
+            "css",
+            "js"
+        ],
+        "url": "https://nassinger.com/projects/tecnologias"
+    },
+    {
         "projectName": "2d-raycaster",
         "technologies": [
             "html",
