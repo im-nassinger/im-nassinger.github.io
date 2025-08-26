@@ -3,8 +3,7 @@
         "projectName": "twitter-interface",
         "technologies": [
             "html",
-            "css",
-            "js"
+            "css"
         ],
         "url": "https://nassinger.com/projects/twitter"
     },
@@ -12,8 +11,7 @@
         "projectName": "web-technologies",
         "technologies": [
             "html",
-            "css",
-            "js"
+            "css"
         ],
         "url": "https://nassinger.com/projects/tecnologias"
     },

@@ -28,11 +28,11 @@
         "description": "Here is a list of some of my projects and experiments.",
         "items": {
             "twitter-interface": {
-                "displayName": "Twitter Interface",
+                "displayName": "Assignment: Twitter Interface",
                 "description": "A simple web interface inspired by Twitter. Made as a web fundamentals activity."
             },
             "web-technologies": {
-                "displayName": "Web Technologies",
+                "displayName": "Assignment: Web Technologies",
                 "description": "A simple website that explains some web technologies, such as HTML, CSS, JS, and HTTP."
             },
             "2d-raycaster": {
