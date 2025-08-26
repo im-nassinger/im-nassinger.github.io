@@ -28,7 +28,7 @@
         "description": "Aqui vai uma lista de alguns dos meus projetos e experimentos.",
         "items": {
             "twitter-interface": {
-                "displayName": "Atividade: interface estilo twitter",
+                "displayName": "Atividade: interface twitter",
                 "description": "Uma interface web simples inspirada no Twitter. Feita como atividade de fundamentos web."
             },
             "web-technologies": {
