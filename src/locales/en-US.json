@@ -59,9 +59,9 @@
         "description": "Here is some additional information about me.",
         "items": {
             "unoesc": {
-                "title": "Computer Engineering",
-                "subtitle": "Teaching Assistant in the Algorithms and Programming Logic course (2025)",
-                "description": "I am currently studying Computer Engineering at [Unoesc](https://www.unoesc.edu.br/campus/chapeco/), and I have recently taken on the role of teaching assistant in the Algorithms and Programming Logic course. Since then, I have been helping students with practical activities and clarifying doubts related to the subject. This experience has significantly contributed to the development of my communication and teamwork skills."
+                "title": "Information Systems",
+                "subtitle": "Designing, developing, testing, and maintaining systems (2025)",
+                "description": "I am currently studying Information Systems at [Unoesc](https://www.unoesc.edu.br/campus/chapeco/), where I am further enhancing my software development skills. The course covers various areas, including systems analysis, databases, networks, and information security. I am learning to design, develop, test, and maintain software systems efficiently and effectively."
             },
             "creative-coding": {
                 "title": "Creative Coding",

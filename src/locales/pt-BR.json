@@ -59,13 +59,13 @@
         "description": "Aqui estão algumas informações adicionais sobre mim.",
         "items": {
             "unoesc": {
-                "title": "Engenharia da Computação",
-                "subtitle": "Monitoria na disciplina de Algoritmos e Lógica de Programação (2025)",
-                "description": " Estou cursando Engenharia da Computação na [Unoesc](https://www.unoesc.edu.br/campus/chapeco/) e recentemente assumi a monitoria em Algoritmos e Lógica de Programação. Desde então, venho auxiliando os alunos em atividades práticas e esclarecendo dúvidas relacionadas à matéria. Essa experiência tem contribuído significativamente para o desenvolvimento das minhas habilidades de comunicação e trabalho em equipe."
+                "title": "Sistemas de Informação",
+                "subtitle": "Projetando, desenvolvendo, testando e mantendo sistemas (2025)",
+                "description": "Estou cursando Sistemas de Informação na [Unoesc](https://www.unoesc.edu.br/campus/chapeco/), onde venho aprimorando ainda mais minhas habilidades em desenvolvimento de software. O curso abrange diversas áreas, incluindo análise de sistemas, banco de dados, redes e segurança da informação. Estou aprendendo a projetar, desenvolver, testar e manter sistemas de software de forma eficiente e eficaz."
             },
             "creative-coding": {
                 "title": "Programação Criativa",
-                "subtitle": "Usando código como meio de expressão artística (2023)",
+                "subtitle": "Utilizando código como meio de expressão artística (2023)",
                 "description": "Fiz cursos de [programação criativa](https://www.youtube.com/watch?v=EoL5R_0h9xk), onde aprendi a usar o código como ferramenta para criar visuais, gráficos e experiências interativas. Eu sei desenvolver peças visuais generativas, explorando movimento, interatividade e formas que mudam em tempo real. Gosto de trabalhar com código de forma experimental, misturando lógica e criatividade para criar composições visuais."
             }
         }

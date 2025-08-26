@@ -1,0 +1,69 @@
+body {
+    margin: 0;
+    background-image: url('./images/nuvens.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: top center;
+    font-family: Tahoma, sans-serif;
+    font-size: 12pt;
+    color: #55acee;
+}
+
+#cabecalho {
+    width: 100%;
+    height: 50px;
+    background-color: #ffffff;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+a {
+    padding: 15px;
+    text-decoration: none;
+    color: #55acee;
+}
+
+a:hover {
+    background-color: #c0deed;
+    color: #ffffff;
+    border-radius: 5px;
+}
+
+#inf {
+    width: 250px;
+    float: left;
+    margin-left: 50px;
+    margin-right: 10px;
+}
+
+.boxinf {
+    background-color: #8ec1da;
+    border: 1px solid #0084b4;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+#tweets {
+    width: 550px;
+    float: left;
+}
+
+.boxtweet {
+    background-color: #ffffff;
+    border: 1px solid #8ec1da;
+    padding: 10px;
+    margin-bottom: 2px;
+}
+
+.boxtweet:hover {
+    background-color: #e9e9e9;
+}
+
+.usuario {
+    float: right;
+}
+
+.texto {
+    color: #000000;
+}

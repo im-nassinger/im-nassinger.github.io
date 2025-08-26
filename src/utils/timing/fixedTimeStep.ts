@@ -7,7 +7,7 @@ export function fixedTimeStep(
     if (!targetFps) {
         updateCallback();
         renderCallback?.();
-        return { cancel: () => {} };
+        return { cancel: () => { } };
     }
 
     targetFps = targetFps || 60;
@@ -17,11 +17,25 @@ export function fixedTimeStep(
     let lastTime = 0,
         accumulatedTime = 0,
         animationId: number | null = null,
-        cancelled = false;
+        cancelled = false,
+        paused = false;
+
+    const pause = () => {
+        if (!animationId || cancelled) return;
+        paused = true;
+        cancelAnimationFrame(animationId);
+        animationId = null;
+    };
+
+    const resume = () => {
+        if (!paused || cancelled) return;
+        paused = false;
+        animationId = requestAnimationFrame(step);
+    };
 
     function step(currentTime: number) {
-        if (cancelled) return;
-        
+        if (cancelled || paused) return;
+
         if (lastTime === 0) {
             lastTime = currentTime;
             animationId = requestAnimationFrame(step);
@@ -32,7 +46,7 @@ export function fixedTimeStep(
 
         lastTime = currentTime;
         accumulatedTime += deltaTime;
-        
+
         while (accumulatedTime >= targetInterval) {
             updateCallback();
             renderCallback?.();
@@ -44,6 +58,19 @@ export function fixedTimeStep(
 
     animationId = requestAnimationFrame(step);
 
+    // window.addEventListener('blur', pause);
+    // window.addEventListener('focus', resume);
+
+    const onVisibilityChange = () => {
+        if (document.hidden) {
+            pause();
+        } else {
+            resume();
+        }
+    };
+
+    document.addEventListener('visibilitychange', onVisibilityChange);
+
     return {
         get animationId() {
             return animationId;
@@ -51,12 +78,24 @@ export function fixedTimeStep(
         get cancelled() {
             return cancelled;
         },
+        get paused() {
+            return paused;
+        },
+        pause,
+        resume,
         cancel: () => {
-            if (animationId) {
-                cancelAnimationFrame(animationId);
-                animationId = null;
-                cancelled = true;
-            }
+            if (!animationId) return;
+
+            cancelAnimationFrame(animationId);
+
+            animationId = null;
+            cancelled = true;
+            paused = false;
+
+            // window.removeEventListener('blur', pause);
+            // window.removeEventListener('focus', resume);
+
+            document.removeEventListener('visibilitychange', onVisibilityChange);
         }
     }
 }
