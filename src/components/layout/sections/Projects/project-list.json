@@ -1,6 +1,6 @@
 [
     {
-        "projectName": "Atividade: interface twitter",
+        "projectName": "twitter-interface",
         "technologies": [
             "html",
             "css",
@@ -9,7 +9,7 @@
         "url": "https://nassinger.com/projects/twitter"
     },
     {
-        "projectName": "Atividade: tecnologias web",
+        "projectName": "web-technologies",
         "technologies": [
             "html",
             "css",

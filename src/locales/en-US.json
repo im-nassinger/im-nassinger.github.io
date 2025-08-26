@@ -27,6 +27,14 @@
         "title": "Projects",
         "description": "Here is a list of some of my projects and experiments.",
         "items": {
+            "twitter-interface": {
+                "displayName": "Twitter Interface",
+                "description": "A simple web interface inspired by Twitter. Made as a web fundamentals activity."
+            },
+            "web-technologies": {
+                "displayName": "Web Technologies",
+                "description": "A simple website that explains some web technologies, such as HTML, CSS, JS, and HTTP."
+            },
             "2d-raycaster": {
                 "displayName": "2D Raycaster",
                 "description": "An implementation of a 2D raycaster in the style of DOOM / Wolfenstein 3D."
