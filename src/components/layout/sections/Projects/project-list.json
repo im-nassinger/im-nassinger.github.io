@@ -1,21 +1,5 @@
 [
     {
-        "projectName": "twitter-interface",
-        "technologies": [
-            "html",
-            "css"
-        ],
-        "url": "https://nassinger.com/projects/twitter"
-    },
-    {
-        "projectName": "web-technologies",
-        "technologies": [
-            "html",
-            "css"
-        ],
-        "url": "https://nassinger.com/projects/tecnologias"
-    },
-    {
         "projectName": "2d-raycaster",
         "technologies": [
             "html",
@@ -23,15 +7,6 @@
             "ts"
         ],
         "url": "https://github.com/im-nassinger/2d-raycaster"
-    },
-    {
-        "projectName": "calculator",
-        "technologies": [
-            "html",
-            "css",
-            "ts"
-        ],
-        "url": "https://github.com/im-nassinger/calculator"
     },
     {
         "projectName": "chatbot",
@@ -58,6 +33,15 @@
             "node"
         ],
         "url": "https://github.com/im-nassinger/pix-client"
+    },
+    {
+        "projectName": "calculator",
+        "technologies": [
+            "html",
+            "css",
+            "ts"
+        ],
+        "url": "https://github.com/im-nassinger/calculator"
     },
     {
         "projectName": "editable-console",
