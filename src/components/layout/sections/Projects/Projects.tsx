@@ -18,10 +18,15 @@ export function ProjectsInfo() {
 }
 
 export function ProjectsList() {
+    const queryParams = new URLSearchParams(window.location.href.split('?')[1]);
+    const isSchoolMode = queryParams.get('school_mode') === 'true';
+
     return (
         <ResponsiveList className="projects-container">
             {
-                projectList.map(({ projectName, technologies, url }) => {
+                projectList.map(({ projectName, technologies, url, activity }) => {
+                    if (activity && !isSchoolMode) return null;
+
                     const titleI18n = `projects.items.${projectName}.displayName`;
                     const descriptionI18n = `projects.items.${projectName}.description`;
 
@@ -33,6 +38,7 @@ export function ProjectsList() {
                             descriptionI18n={descriptionI18n}
                             technologies={technologies}
                             url={url}
+                            activity={activity}
                         />
                     );
                 })

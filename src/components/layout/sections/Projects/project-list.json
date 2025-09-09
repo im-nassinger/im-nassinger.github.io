@@ -1,5 +1,33 @@
 [
     {
+        "projectName": "plumber-website",
+        "technologies": [
+            "html",
+            "css"
+        ],
+        "url": "https://github.com/im-nassinger/plumber-website",
+        "activity": true
+    },
+    {
+        "projectName": "twitter-interface",
+        "technologies": [
+            "html",
+            "css"
+        ],
+        "url": "https://github.com/im-nassinger/twitter-interface",
+        "activity": true
+    },
+    {
+        "projectName": "web-technologies",
+        "technologies": [
+            "html",
+            "css",
+            "js"
+        ],
+        "url": "https://github.com/im-nassinger/web-technologies",
+        "activity": true
+    },
+    {
         "projectName": "2d-raycaster",
         "technologies": [
             "html",

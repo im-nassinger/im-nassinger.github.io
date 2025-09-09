@@ -8,6 +8,7 @@ import './ProjectCard.css';
 
 export type ProjectCardProps = {
     projectName?: string;
+    activity?: boolean;
     className?: string;
     title?: string;
     titleI18n?: string;

@@ -27,6 +27,10 @@
         "title": "Projects",
         "description": "Here is a list of some of my projects and experiments.",
         "items": {
+            "plumber-website": {
+                "displayName": "Assignment: Plumber Website",
+                "description": "A simple website for a plumber. Made as a web fundamentals activity."
+            },
             "twitter-interface": {
                 "displayName": "Assignment: Twitter Interface",
                 "description": "A simple web interface inspired by Twitter. Made as a web fundamentals activity."
