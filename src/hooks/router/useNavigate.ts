@@ -4,25 +4,28 @@ import { useCallback } from 'react';
 // this doesn't cause re-renders on location change.
 export function useNavigate() {
     return useCallback((to: string, { replace = false } = {}) => {
-        const fromSearch = location.href.split('?')[1];
-        const toSearch = to.split('?')[1];
+        const [ _fromHref, fromSearch ] = window.location.href.split('?');
+        const [ toHref, toSearch ] = to.split('?');
 
         const fromParams = new URLSearchParams(fromSearch);
         const toParams = new URLSearchParams(toSearch);
+        const allParams = new URLSearchParams();
 
-        const allParams = new URLSearchParams({
-            ...Object.fromEntries(fromParams.entries()),
-            ...Object.fromEntries(toParams.entries())
-        });
-
-        if (allParams.toString()) {
-            to = to.split('?')[0] + '?' + allParams.toString();
+        for (const [key, value] of fromParams) {
+            allParams.set(key, value);
         }
 
+        for (const [key, value] of toParams) {
+            allParams.set(key, value);
+        }
+
+        const finalSearch = allParams.toString();
+        const finalUrl = finalSearch ? `${toHref}?${finalSearch}` : toHref;
+
         if (replace) {
-            window.history.replaceState({}, '', to);
+            window.history.replaceState({}, '', finalUrl);
         } else {
-            window.history.pushState({}, '', to);
+            window.history.pushState({}, '', finalUrl);
         }
 
         window.dispatchEvent(new PopStateEvent('popstate'));

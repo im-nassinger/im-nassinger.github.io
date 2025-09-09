@@ -10,7 +10,10 @@ import { SmoothScrollProvider } from '@/providers';
 import { App } from '@/components';
 import { ToastContainer } from 'react-toastify';
 
-if (!location.hash) location.hash = '#start';
+if (!location.hash) {
+    const [ href, search ] = location.href.split('?');
+    location.href = href + '#start' + (search ? `?${search}` : '');
+}
 
 const shouldScan = import.meta.env.DEV && location.href.includes('?scan');
 
