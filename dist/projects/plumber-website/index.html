@@ -2,391 +2,314 @@
 <html lang="pt-BR">
 
 <head>
-    <title>HidroTech Encanamentos — Cuidando da sua água, protegendo seu lar.</title>
-
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>HidroTech Encanamentos</title>
     <meta name="description"
-        content="Encanadores em Campinas/SP. Vazamentos, aquecedores a gás, desentupimentos. Atendimento ágil e de qualidade." />
-
-    <link rel="icon" href="./img/logo.png" />
-    <link rel="stylesheet" href="./css/style.css" />
+        content="Serviços hidráulicos em Campinas: vazamentos, aquecedores a gás e desentupimento.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/css/styles.css">
+    <link rel="icon" href="./assets/img/logo/logo.svg">
+    <meta name="theme-color" content="#003366">
 </head>
 
 <body>
-    <a class="skip-link" href="#inicio">Ir para o conteúdo</a>
-
     <header class="site-header">
-        <div class="container nav-wrap">
-            <a href="#inicio" class="brand" aria-label="Ir para o início">
-                <img src="./img/logo.png" alt="Logomarca HidroTech" class="brand-logo" />
+        <div class="container header-inner">
+            <a class="brand" href="#home">
+                <img src="./assets/img/logo/logo.svg" alt="HidroTech Encanamentos" class="logo">
                 <span class="brand-text">HidroTech Encanamentos</span>
             </a>
-
-            <input id="nav-toggle" type="checkbox" class="nav-toggle" aria-label="Abrir menu" />
-            <label for="nav-toggle" class="nav-burger" aria-hidden="true">
-                <span></span><span></span><span></span>
-            </label>
-
-            <nav class="nav" aria-label="Menu principal">
-                <a href="#sobre">Sobre</a>
+            <button class="nav-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+            <nav class="site-nav" id="site-nav">
+                <a href="#home">Início</a>
                 <a href="#servicos">Serviços</a>
+                <a href="#empresa">Empresa</a>
                 <a href="#profissionais">Profissionais</a>
                 <a href="#clientes">Clientes</a>
                 <a href="#blog">Blog</a>
-                <a href="#contato" class="btn btn-small btn-primary">Contato</a>
+                <a href="#contato">Contato</a>
             </nav>
         </div>
     </header>
 
-    <section id="inicio" class="hero">
-        <div class="container hero-inner">
-            <div class="hero-copy flex-col gap-4">
-                <h1>HidroTech Encanamentos</h1>
-                <p class="tagline">“Cuidando da sua água, protegendo seu lar.”</p>
-                <ul class="bullets flex-col gap-2">
-                    <li>Atendimento ágil em Campinas e região</li>
-                    <li>Equipe certificada e equipamentos modernos</li>
-                    <li>Instalações, manutenções e emergências</li>
-                </ul>
-                <div class="flex-row gap-3 wrap">
-                    <a class="btn btn-primary" href="https://wa.me/5519998765432" target="_blank" rel="noopener">Chamar
-                        no WhatsApp</a>
-                    <a class="btn btn-outline" href="#servicos">Ver serviços</a>
-                </div>
-            </div>
-            <div class="hero-media">
-                <img src="./img/plumber.png" alt="Imagem de encanador" />
-            </div>
-        </div>
-    </section>
-
-    <section id="sobre" class="section section--white">
-        <div class="container flex-col gap-5">
-            <header class="section-head flex-col gap-2">
-                <h2>Sobre a HidroTech</h2>
-                <p>Qualidade, confiança e atendimento humanizado desde 2010.</p>
-            </header>
-
-            <div class="about-layout flex-row gap-6 wrap">
-
-                <div class="about-intro flex-col gap-3">
-                    <p>A HidroTech Encanamentos nasceu em 2010 com o objetivo de oferecer serviços de encanamento de
-                        qualidade e confiança na região de Campinas. Seu fundador, João Batista, começou a empresa com
-                        apenas uma caixa de ferramentas e um grande sonho: trazer soluções rápidas, seguras e duradouras
-                        para problemas hidráulicos que afetam tanto residências quanto empresas.</p>
-                    <p>Com mais de 10 anos de atuação no mercado, a HidroTech se consolidou como referência em serviços
-                        hidráulicos, conquistando a confiança de clientes pelo atendimento humanizado, pontualidade e
-                        excelência técnica. Hoje, contamos com equipe especializada e equipamentos modernos para atender
-                        desde pequenos reparos até grandes projetos de instalação.</p>
-
-                    <ul class="about-points flex-col gap-2">
-                        <li><span class="icon">✓</span> Atendimento pontual e transparente</li>
-                        <li><span class="icon">✓</span> Diagnóstico preciso, intervenção mínima</li>
-                        <li><span class="icon">✓</span> Residencial, comercial e industrial</li>
-                    </ul>
-                </div>
-
-                <aside class="about-aside flex-col gap-4">
-                    <div class="feature-list flex-col gap-2">
-                        <div class="feature flex-row gap-2">
-                            <span class="feature-dot"></span>
-                            <div class="flex-col gap-1">
-                                <strong>Equipe certificada</strong>
-                                <small>Formação técnica e treinamentos em normas e segurança.</small>
-                            </div>
-                        </div>
-                        <div class="feature flex-row gap-2">
-                            <span class="feature-dot"></span>
-                            <div class="flex-col gap-1">
-                                <strong>Ferramentas modernas</strong>
-                                <small>Detecção de vazamentos e instalação com precisão.</small>
-                            </div>
-                        </div>
-                        <div class="feature flex-row gap-2">
-                            <span class="feature-dot"></span>
-                            <div class="flex-col gap-1">
-                                <strong>Atendimento humanizado</strong>
-                                <small>Orçamento claro e acompanhamento do início ao fim.</small>
-                            </div>
-                        </div>
+    <main id="home" class="site-main">
+        <section class="hero">
+            <div class="container hero-inner">
+                <div class="hero-copy">
+                    <h1>Cuidando da sua água, protegendo seu lar.</h1>
+                    <p>Atendimento hidráulico 24h em Campinas e região. Vazamentos, aquecedores a gás e desentupimento.
+                    </p>
+                    <div class="hero-cta">
+                        <a class="btn btn-primary" href="#servicos">Ver serviços</a>
+                        <a class="btn btn-outline" href="https://wa.me/5519998765432" target="_blank"
+                            rel="noopener">WhatsApp</a>
                     </div>
-
-                    <div class="mvv-wrap flex-col gap-3">
-                        <div class="mvv-top flex-row gap-4">
-                            <section class="mvv-item flex-col gap-1">
-                                <h3>Missão</h3>
-                                <p>Entregar soluções hidráulicas seguras, ágeis e acessíveis.</p>
-                            </section>
-                            <section class="mvv-item flex-col gap-1">
-                                <h3>Visão</h3>
-                                <p>Ser a empresa de encanamentos mais confiável e inovadora do interior paulista até
-                                    2030.</p>
-                            </section>
+                </div>
+                <div class="hero-media">
+                    <div class="carousel" data-carousel>
+                        <div class="carousel-track">
+                            <img src="./assets/img/servicos/vazamento-condominio.jpg" alt="Conserto de vazamentos">
+                            <img src="./assets/img/servicos/aquecedor-a-gas.jpg" alt="Instalação de aquecedores a gás">
+                            <img src="./assets/img/servicos/desentupimento.jpg" alt="Desentupimento de pias e ralos">
                         </div>
-                        <div class="mvv-bottom flex-row">
-                            <section class="mvv-item flex-col gap-1 flex-1">
-                                <h3>Valores</h3>
-                                <ul class="list flex-col gap-1">
-                                    <li>Qualidade e ética</li>
+                        <button class="carousel-btn prev" aria-label="Anterior">‹</button>
+                        <button class="carousel-btn next" aria-label="Próximo">›</button>
+                        <div class="carousel-dots" aria-label="Indicadores"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="servicos" class="section">
+            <div class="container">
+                <header class="section-header">
+                    <h2>Catálogo de serviços</h2>
+                    <p>Solicite um orçamento rápido e sem compromisso.</p>
+                </header>
+                <div class="grid cards">
+                    <article class="card">
+                        <img src="./assets/img/servicos/vazamento-condominio.jpg" alt="Conserto de Vazamentos">
+                        <div class="card-body">
+                            <h3>Conserto de Vazamentos</h3>
+                            <p>Detecção e reparo sem quebras desnecessárias.</p>
+                            <div class="price">R$ 180,00</div>
+                            <div class="actions">
+                                <a class="btn btn-primary" href="servico1.html">Detalhes</a>
+                                <a class="btn btn-outline" href="servico1.html#orcamento">Solicitar orçamento</a>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="card">
+                        <img src="./assets/img/servicos/aquecedor-a-gas.jpg" alt="Instalação de Aquecedores a Gás">
+                        <div class="card-body">
+                            <h3>Instalação de Aquecedores a Gás</h3>
+                            <p>Montagem, manutenção e regulagem conforme normas.</p>
+                            <div class="price">R$ 850,00</div>
+                            <div class="actions">
+                                <a class="btn btn-primary" href="servico2.html">Detalhes</a>
+                                <a class="btn btn-outline" href="servico2.html#orcamento">Solicitar orçamento</a>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="card">
+                        <img src="./assets/img/servicos/desentupimento.jpg" alt="Desentupimento de Pias e Ralos">
+                        <div class="card-body">
+                            <h3>Desentupimento de Pias e Ralos</h3>
+                            <p>Desobstrução rápida com técnicas não invasivas.</p>
+                            <div class="price">R$ 220,00</div>
+                            <div class="actions">
+                                <a class="btn btn-primary" href="servico3.html">Detalhes</a>
+                                <a class="btn btn-outline" href="servico3.html#orcamento">Solicitar orçamento</a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="empresa" class="section alt">
+            <div class="container">
+                <header class="section-header">
+                    <h2>Sobre a HidroTech</h2>
+                </header>
+                <div class="content two-col">
+                    <div>
+                        <p>A HidroTech Encanamentos nasceu em 2010 com o objetivo de oferecer serviços de encanamento de
+                            qualidade e confiança na região de Campinas. Seu fundador, João Batista, começou a empresa
+                            com apenas uma caixa de ferramentas e um grande sonho: trazer soluções rápidas, seguras e
+                            duradouras para problemas hidráulicos que afetam tanto residências quanto empresas.</p>
+                        <p>Com mais de 10 anos de atuação no mercado, a HidroTech se consolidou como referência em
+                            serviços hidráulicos, conquistando a confiança de clientes pelo atendimento humanizado,
+                            pontualidade e excelência técnica. Hoje, a empresa conta com uma equipe especializada e
+                            equipamentos modernos para atender desde pequenos reparos até grandes projetos de
+                            instalação.</p>
+                    </div>
+                    <div class="kv">
+                        <div class="pillars">
+                            <div>
+                                <h4>Missão</h4>
+                                <p>Oferecer soluções hidráulicas seguras, ágeis e acessíveis.</p>
+                            </div>
+                            <div>
+                                <h4>Visão</h4>
+                                <p>Ser referência em encanamentos no interior paulista até 2030.</p>
+                            </div>
+                            <div>
+                                <h4>Valores</h4>
+                                <ul>
+                                    <li>Qualidade</li>
+                                    <li>Ética e transparência</li>
                                     <li>Respeito ao cliente</li>
                                     <li>Sustentabilidade</li>
                                     <li>Valorização dos profissionais</li>
                                 </ul>
-                            </section>
+                            </div>
                         </div>
                     </div>
-                </aside>
-            </div>
-        </div>
-    </section>
-
-    <section id="servicos" class="section section--muted">
-        <div class="container flex-col gap-5">
-            <header class="section-head flex-col gap-2">
-                <h2>Serviços</h2>
-                <p>Soluções completas em encanamentos para residências e comércios.</p>
-            </header>
-
-            <div class="services-list flex-row gap-5 wrap">
-
-                <article class="service flex-col gap-2">
-                    <div class="service-media flex-row gap-2 wrap"></div>
-                    <div class="service-body flex-col gap-2">
-                        <h3>Conserto de Vazamentos</h3>
-                        <p>Localização e reparo de vazamentos em tubulações, torneiras e registros, utilizando
-                            equipamentos modernos para evitar quebras desnecessárias.</p>
-                    </div>
-                </article>
-
-                <article class="service flex-col gap-2">
-                    <div class="service-media flex-row gap-2 wrap"></div>
-                    <div class="service-body flex-col gap-2">
-                        <h3>Instalação de Aquecedores a Gás</h3>
-                        <p>Montagem, manutenção e regulagem de aquecedores a gás para residências e empresas, sempre em
-                            conformidade com normas de segurança.</p>
-                    </div>
-                </article>
-
-                <article class="service flex-col gap-2">
-                    <div class="service-media flex-row gap-2 wrap"></div>
-                    <div class="service-body flex-col gap-2">
-                        <h3>Desentupimento de Pias e Ralos</h3>
-                        <p>Desobstrução rápida de encanamentos, ralos e pias utilizando técnicas não invasivas que
-                            evitam danos às estruturas.</p>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </section>
-
-    <section id="profissionais" class="section section--white">
-        <div class="container flex-col gap-5">
-            <header class="section-head flex-col gap-2">
-                <h2>Profissionais</h2>
-                <p>Equipe experiente, certificada e pronta para atender.</p>
-            </header>
-
-            <div class="team-list flex-row gap-5 wrap">
-                <article class="team flex-row gap-3">
-                    <div class="team-body flex-col gap-1">
-                        <h3>João Batista <small>— Fundador e Encanador Chefe</small></h3>
-                        <p>Mais de 20 anos de experiência. Especialista em projetos hidráulicos e reparos emergenciais.
-                            Certificação SENAI em Encanamento e atendimento personalizado.</p>
-                    </div>
-                </article>
-
-                <article class="team flex-row gap-3">
-                    <div class="team-body flex-col gap-1">
-                        <h3>Maria Oliveira <small>— Técnica em Instalações Hidráulicas</small></h3>
-                        <p>Engenharia Civil. Atua na supervisão de obras e instalações. Excelência na conformidade com
-                            normas e segurança.</p>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </section>
-
-    <section id="clientes" class="section section--muted">
-        <div class="container flex-col gap-5">
-            <header class="section-head flex-col gap-2">
-                <h2>Clientes & Depoimentos</h2>
-            </header>
-
-            <div class="clients-wrap flex-col gap-5">
-                <div class="flex-col gap-2">
-                    <h3>Alguns serviços realizados</h3>
-                    <ul class="check flex-col gap-1">
-                        <li>Residência no Centro (Campinas/SP) — Conserto de vazamento oculto</li>
-                        <li>Restaurante local — Troca de ramais e instalação de aquecedor a gás</li>
-                        <li>Escola de bairro — Manutenção preventiva em rede hidráulica</li>
-                    </ul>
                 </div>
 
-                <div class="testimonials flex-row gap-4 wrap">
-                    <article class="testimonial flex-col gap-1">
-                        <blockquote>“Serviço rápido e de qualidade, resolveram meu problema em menos de uma hora!”
-                        </blockquote>
-                        <p class="author">— Carlos Mendes • 15/04/2023</p>
-                    </article>
+                <div class="address">
+                    <h3>Endereço e contatos</h3>
+                    <p>Rua das Palmeiras, 125 – Centro – Campinas/SP – CEP: 13015-050</p>
+                    <p>Telefone/WhatsApp: <a href="https://wa.me/5519998765432" target="_blank" rel="noopener">(19)
+                            99876-5432</a></p>
+                    <div class="map">
+                        <iframe title="Mapa HidroTech"
+                            src="https://www.google.com/maps?q=Rua%20das%20Palmeiras%2C%20125%2C%20Campinas%20SP&output=embed"
+                            loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-                    <article class="testimonial flex-col gap-1">
-                        <blockquote>“Excelente atendimento, profissionais muito atenciosos e cuidadosos.”</blockquote>
-                        <p class="author">— Fernanda Souza • 08/09/2023</p>
+        <section id="profissionais" class="section">
+            <div class="container">
+                <header class="section-header">
+                    <h2>Profissionais</h2>
+                    <p>Equipe qualificada e certificada para atender com excelência.</p>
+                </header>
+                <div class="grid team">
+                    <article class="person">
+                        <img src="./assets/img/profissionais/Joao Batista.jpg" alt="João Batista">
+                        <h3>João Batista</h3>
+                        <p>Fundador e Encanador Chefe</p>
                     </article>
-
-                    <article class="testimonial flex-col gap-1">
-                        <blockquote>“Contratei para instalar meu aquecedor a gás, ficou perfeito. Recomendo!”
-                        </blockquote>
-                        <p class="author">— Ricardo Lima • 20/01/2024</p>
+                    <article class="person">
+                        <img src="./assets/img/profissionais/Maria Oliveira.jpg" alt="Maria Oliveira">
+                        <h3>Maria Oliveira</h3>
+                        <p>Técnica em Instalações Hidráulicas</p>
                     </article>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="blog" class="section section--white">
-        <div class="container flex-col gap-5">
-            <header class="section-head flex-col gap-2">
-                <h2>Blog</h2>
-                <p>Dicas e conteúdos sobre hidráulica e eficiência.</p>
-            </header>
+        <section id="clientes" class="section alt">
+            <div class="container">
+                <header class="section-header">
+                    <h2>Clientes e Depoimentos</h2>
+                </header>
 
-            <div class="blog-list flex-row gap-5 wrap">
+                <div class="testimonials">
+                    <article class="testimonial">
+                        <img src="./assets/img/clientes/depo1.jpg" alt="Foto de Carlos Mendes">
+                        <div>
+                            <p>“Serviço rápido e de qualidade, resolveram meu problema em menos de uma hora!”</p>
+                            <div class="byline">Carlos Mendes – 15/04/2023</div>
+                        </div>
+                    </article>
+                    <article class="testimonial">
+                        <img src="./assets/img/clientes/depo2.jpg" alt="Foto de Fernanda Souza">
+                        <div>
+                            <p>“Excelente atendimento, profissionais muito atenciosos e cuidadosos.”</p>
+                            <div class="byline">Fernanda Souza – 08/09/2023</div>
+                        </div>
+                    </article>
+                    <article class="testimonial">
+                        <img src="./assets/img/clientes/depo3.jpg" alt="Foto de Ricardo Lima">
+                        <div>
+                            <p>“Contratei para instalar meu aquecedor a gás, ficou perfeito. Recomendo!”</p>
+                            <div class="byline">Ricardo Lima – 20/01/2024</div>
+                        </div>
+                    </article>
+                    <article class="testimonial">
+                        <img src="./assets/img/clientes/depo4.jpg" alt="Foto de Ana Clara">
+                        <div>
+                            <p>“Preço justo e atendimento pontual. Viraram referência aqui em casa.”</p>
+                            <div class="byline">Ana Clara – 05/05/2024</div>
+                        </div>
+                    </article>
+                    <article class="testimonial">
+                        <img src="./assets/img/clientes/depo5.jpg" alt="Foto de Paulo Henrique">
+                        <div>
+                            <p>“Desentupiram meu ralo sem quebradeira e sem sujeira. Excelente.”</p>
+                            <div class="byline">Paulo Henrique – 18/08/2024</div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
 
-                <article class="post flex-col gap-2">
-                    <div class="post-body flex-col gap-2">
-                        <h3>Como identificar vazamentos em casa antes que virem dor de cabeça</h3>
-                        <p>Pequenos vazamentos podem causar grandes prejuízos se não forem detectados a tempo. Sinais
-                            comuns: manchas nas paredes, aumento na conta de água e pisos soltos. Veja também como
-                            monitorar o hidrômetro e identificar anomalias no consumo.</p>
-                        <ul class="meta flex-col gap-1">
-                            <li>Autor: João Batista</li>
-                            <li>Data e hora: 12/02/2024 — 10h30</li>
-                            <li>Fonte: <a
-                                    href="https://www.sabesp.com.br/assets/images/folhetos/sabesp-aprenda-controlar-consumo-agua.pdf"
-                                    target="_blank" rel="noopener">Sabesp — Aprenda a controlar seu consumo de água
-                                    (cartilha)</a></li>
+        <section id="blog" class="section">
+            <div class="container">
+                <header class="section-header">
+                    <h2>Blog</h2>
+                </header>
+                <div class="grid blog">
+                    <article class="post">
+                        <img src="./assets/img/servicos/vazamento-condominio.jpg" alt="Identificar vazamentos">
+                        <div class="post-body">
+                            <h3>Como identificar vazamentos em casa antes que virem dor de cabeça</h3>
+                            <p>Pequenos vazamentos podem causar grandes prejuízos se não forem detectados a tempo.
+                                Sinais comuns incluem manchas nas paredes, aumento na conta de água e pisos soltos. Veja
+                                também como monitorar seu hidrômetro.</p>
+                            <div class="meta">Por João Batista • 12/02/2024 – 10h30 • Fonte: <a
+                                    href="https://www.sabesp.com.br" target="_blank" rel="noopener">Sabesp</a></div>
+                        </div>
+                    </article>
+                    <article class="post">
+                        <img src="./assets/img/servicos/aquecedor-a-gas.jpg" alt="Aquecedor a gás">
+                        <div class="post-body">
+                            <h3>Vantagens de instalar aquecedor a gás em sua residência</h3>
+                            <p>O aquecedor a gás é prático e econômico. Abordamos benefícios, cuidados na instalação e
+                                manutenção preventiva para garantir segurança e durabilidade.</p>
+                            <div class="meta">Por Maria Oliveira • 25/03/2024 – 14h00 • Fonte: <a
+                                    href="https://www.procelinfo.com.br" target="_blank" rel="noopener">Procel Info</a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="contato" class="section alt">
+            <div class="container">
+                <header class="section-header">
+                    <h2>Contato</h2>
+                </header>
+                <div class="contact-grid">
+                    <form class="contact-form" action="#" method="post" onsubmit="return false">
+                        <div class="field">
+                            <label for="nome">Nome</label>
+                            <input id="nome" name="nome" type="text" required>
+                        </div>
+                        <div class="field">
+                            <label for="email">Email</label>
+                            <input id="email" name="email" type="email" required>
+                        </div>
+                        <div class="field full">
+                            <label for="mensagem">Mensagem</label>
+                            <textarea id="mensagem" name="mensagem" rows="5" required></textarea>
+                        </div>
+                        <button class="btn btn-primary" type="submit">Enviar</button>
+                    </form>
+                    <div class="contact-info">
+                        <h3>HidroTech Encanamentos</h3>
+                        <ul>
+                            <li>E-mail: contato@hidrotech.com.br</li>
+                            <li>Telefone/WhatsApp: <a href="https://wa.me/5519998765432" target="_blank"
+                                    rel="noopener">(19) 99876-5432</a></li>
+                            <li>Endereço: Rua das Palmeiras, 125 – Centro – Campinas/SP – CEP: 13015-050</li>
+                            <li>Redes sociais: <a href="#" aria-label="Instagram">Instagram</a> · <a href="#"
+                                    aria-label="Facebook">Facebook</a></li>
                         </ul>
                     </div>
-                </article>
-
-                <article class="post flex-col gap-2">
-                    <div class="post-body flex-col gap-2">
-                        <h3>Vantagens de instalar aquecedor a gás em sua residência</h3>
-                        <p>O aquecedor a gás é prático e econômico para quem busca conforto e redução na conta de
-                            energia. Entenda benefícios, cuidados na instalação e manutenção preventiva para garantir
-                            segurança e durabilidade do equipamento.</p>
-                        <ul class="meta flex-col gap-1">
-                            <li>Autor: Maria Oliveira</li>
-                            <li>Data e hora: 25/03/2024 — 14h00</li>
-                            <li>Fontes:
-                                <a href="https://www.comgas.com.br/media/lwmd3f4i/comgas_siga_digital_site_2025-04-28.pdf"
-                                    target="_blank" rel="noopener">Comgás — Segurança nas instalações de gás (SIGA)</a>
-                                •
-                                <a href="https://www.abrinstal.org.br/wp-content/uploads/2024/09/240823_13wsgases_apres02.pdf"
-                                    target="_blank" rel="noopener">ABNT NBR 13103:2024 — Instalação de aparelhos a gás
-                                    (apresentação ABRINSTAL)</a>
-                            </li>
-                        </ul>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </section>
-
-    <section id="contato" class="section section--muted">
-        <div class="container flex-col gap-5">
-            <header class="section-head flex-col gap-2">
-                <h2>Contato</h2>
-                <p>Fale com a nossa equipe e peça seu orçamento.</p>
-            </header>
-
-            <div class="contact-wrap flex-row gap-5 wrap">
-
-                <div class="contact-info flex-col gap-4">
-                    <div class="contact-block flex-col gap-1">
-                        <h3>Endereço</h3>
-                        <address>
-                            Rua das Palmeiras, 125<br />
-                            Bairro Centro — Campinas/SP — CEP: 13015-050
-                        </address>
-                    </div>
-
-                    <div class="contact-actions flex-row gap-2 wrap">
-                        <a class="btn btn-primary" href="https://wa.me/5519998765432" target="_blank"
-                            rel="noopener">WhatsApp: (19) 99876-5432</a>
-                        <a class="btn btn-outline" href="tel:+5519998765432">Ligar agora</a>
-                    </div>
                 </div>
-
-                <figure class="map flex-col gap-1">
-                    <figcaption>Atendemos Campinas e região.</figcaption>
-                </figure>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
     <footer class="site-footer">
-
-        <div class="footer-cta">
-            <div class="container flex-row wrap gap-3 justify-between align-center">
-                <div class="cta-text flex-col gap-1">
-                    <strong class="cta-title">Precisa de um encanador agora?</strong>
-                    <span class="cta-sub">Atendimento em Campinas e região.</span>
-                </div>
-                <div class="cta-actions flex-row gap-2 wrap">
-                    <a class="btn btn-primary" href="https://wa.me/5519998765432" target="_blank" rel="noopener">Chamar
-                        no WhatsApp</a>
-                    <a class="btn btn-outline" href="tel:+5519998765432">Ligar agora</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="footer-main">
-            <div class="container flex-row wrap gap-6 align-start">
-                <div class="footer-brand flex-row gap-2">
-                    <img src="./img/logo.png" alt="Logomarca HidroTech" class="footer-logo" />
-                    <div class="flex-col gap-1">
-                        <strong>HidroTech Encanamentos</strong>
-                        <small>Razão social: HidroTech Soluções em Hidráulica LTDA</small>
-                    </div>
-                </div>
-
-                <nav class="footer-nav flex-row gap-6" aria-label="Navegação do site">
-                    <div class="flex-col gap-1">
-                        <h4>Site</h4>
-                        <a href="#sobre">Sobre</a>
-                        <a href="#servicos">Serviços</a>
-                        <a href="#profissionais">Profissionais</a>
-                        <a href="#clientes">Clientes</a>
-                        <a href="#blog">Blog</a>
-                        <a href="#contato">Contato</a>
-                    </div>
-                    <div class="flex-col gap-1">
-                        <h4>Serviços</h4>
-                        <a href="#servicos">Vazamentos</a>
-                        <a href="#servicos">Aquecedores a gás</a>
-                        <a href="#servicos">Desentupimento</a>
-                    </div>
-                </nav>
-
-                <address class="footer-contact flex-col gap-1">
-                    <h4>Contato</h4>
-                    <span>Rua das Palmeiras, 125 — Centro, Campinas/SP</span>
-                    <a href="https://wa.me/5519998765432" target="_blank" rel="noopener">WhatsApp: (19) 99876-5432</a>
-                    <a href="tel:+5519998765432">Ligar: (19) 99876-5432</a>
-                </address>
-            </div>
-        </div>
-
-        <div class="footer-legal">
-            <div class="container flex-row wrap gap-2 justify-between align-center">
-                <small>© 2025 HidroTech Encanamentos. Todos os direitos reservados.</small>
-                <a class="to-top-inline" href="#inicio" aria-label="Voltar ao topo">Voltar ao topo ↑</a>
-            </div>
+        <div class="container footer-inner">
+            <p>© <span id="year"></span> HidroTech Encanamentos • Desenvolvido por Gabriel Nassinger</p>
+            <a class="btn btn-outline" href="https://wa.me/5519998765432" target="_blank" rel="noopener">Fale no
+                WhatsApp</a>
         </div>
     </footer>
+
+    <script src="./assets/js/main.js"></script>
 </body>
 
 </html>

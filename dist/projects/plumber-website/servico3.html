@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Desentupimento de Pias e Ralos • HidroTech</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <meta name="theme-color" content="#003366">
+    <link rel="icon" href="assets/img/logo/logo.svg">
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="brand" href="index.html">
+                <img src="./assets/img/logo/logo.svg" alt="HidroTech Encanamentos" class="logo">
+                <span class="brand-text">HidroTech Encanamentos</span>
+            </a>
+            <nav class="site-nav" id="site-nav">
+                <a href="index.html#servicos">Serviços</a>
+                <a href="index.html#empresa">Empresa</a>
+                <a href="index.html#contato">Contato</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="site-main section">
+        <div class="container">
+            <a class="btn btn-outline" href="index.html">← Voltar</a>
+            <header class="section-header" style="margin-top:14px">
+                <h1>Desentupimento de Pias e Ralos</h1>
+                <p>Desobstrução rápida com técnicas não invasivas.</p>
+            </header>
+
+            <div class="grid" style="grid-template-columns:1fr 1fr">
+                <div class="carousel" data-carousel>
+                    <div class="carousel-track">
+                        <img src="./assets/img/servicos/desentupimento.jpg" alt="Desentupimento 1">
+                        <img src="./assets/img/servicos/desentupimento-2.webp" alt="Desentupimento 2">
+                    </div>
+                    <button class="carousel-btn prev" aria-label="Anterior">‹</button>
+                    <button class="carousel-btn next" aria-label="Próximo">›</button>
+                    <div class="carousel-dots" aria-label="Indicadores"></div>
+                </div>
+                <div>
+                    <div class="card" style="padding:16px">
+                        <div class="price">R$ 220,00</div>
+                        <ul>
+                            <li>Tempo médio: 1 a 2 horas</li>
+                            <li>Dias: Segunda a Sábado</li>
+                            <li>Horários: 8h às 18h</li>
+                        </ul>
+                        <a class="btn btn-primary" href="#orcamento">Solicitar orçamento</a>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top:24px" class="card">
+                <div class="card-body">
+                    <h2>Vídeo relacionado</h2>
+                    <div class="map" style="margin-top:10px">
+                        <iframe width="853" height="480" src="https://www.youtube.com/embed/FgclbjqsHJY"
+                            title="Rickroll 4k No Copyright II Yep! Its 4k!" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+
+            <div id="orcamento" class="section">
+                <header class="section-header">
+                    <h2>Orçamento</h2>
+                </header>
+                <button class="btn btn-primary" data-open-modal>Solicitar orçamento</button>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal" hidden>
+        <div class="modal-backdrop" data-close-modal></div>
+        <div class="modal-card">
+            <header class="modal-header">
+                <h3>Orçamento - Desentupimento de Pias e Ralos</h3>
+                <button class="modal-close" aria-label="Fechar" data-close-modal>×</button>
+            </header>
+            <form class="modal-body" onsubmit="return false">
+                <div class="grid" style="grid-template-columns:1fr 1fr">
+                    <div class="field"><label for="m-nome">Nome</label><input id="m-nome" required></div>
+                    <div class="field"><label for="m-email">E-mail</label><input id="m-email" type="email" required>
+                    </div>
+                    <div class="field"><label for="m-tel">Telefone</label><input id="m-tel" required></div>
+                    <div class="field"><label for="m-end">Endereço</label><input id="m-end" required></div>
+                    <div class="field"><label for="m-cidade">Cidade</label><input id="m-cidade" required></div>
+                    <div class="field"><label for="m-uf">UF</label><input id="m-uf" maxlength="2" required></div>
+                    <div class="field"><label for="m-data">Data desejada</label><input id="m-data" type="date" required>
+                    </div>
+                    <div class="field" style="grid-column:1/-1"><label for="m-obs">Observações</label><textarea
+                            id="m-obs" rows="4"></textarea></div>
+                </div>
+                <div style="margin-top:10px"><button class="btn btn-primary" type="submit">Enviar</button></div>
+            </form>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <p>© <span id="year"></span> HidroTech Encanamentos • Desenvolvido por Gabriel Nassinger</p>
+        </div>
+    </footer>
+
+    <script src="./assets/js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.querySelector('.modal');
+            const openBtn = document.querySelector('[data-open-modal]');
+            const closeEls = document.querySelectorAll('[data-close-modal]');
+            function open() { modal.hidden = false; document.body.style.overflow = 'hidden'; }
+            function close() { modal.hidden = true; document.body.style.overflow = ''; }
+            openBtn.addEventListener('click', open);
+            closeEls.forEach(e => e.addEventListener('click', close));
+            document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden) close(); });
+        });
+    </script>
+</body>
+
+</html>
