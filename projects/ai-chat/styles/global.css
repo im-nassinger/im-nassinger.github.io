@@ -39,6 +39,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 2rem;
     background: var(--bg-1);
 
     &.loading .chat,
@@ -79,7 +80,8 @@ button {
 }
 
 .chat {
-    width: 42rem;
+    width: 100%;
+    max-width: 42rem;
     height: 50rem;
     display: flex;
     flex-direction: column;
