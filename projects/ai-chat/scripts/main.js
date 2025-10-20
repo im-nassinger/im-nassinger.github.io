@@ -151,7 +151,7 @@ function sleep(ms) {
 }
 async function checkServerAvailability() {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 3000);
+    const timeout = setTimeout(() => controller.abort(), 2000);
 
     try {
         const apiURL = getApiURL();
@@ -172,7 +172,7 @@ async function checkServerAvailability() {
         document.body.classList.remove('loading');
     } catch (error) {
         clearTimeout(timeout);
-        
+
         const loadingScreen = document.querySelector('.loading-screen');
         loadingScreen.classList.add('show');
 
