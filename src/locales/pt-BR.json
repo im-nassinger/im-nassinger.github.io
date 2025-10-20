@@ -27,6 +27,10 @@
         "title": "Projetos",
         "description": "Aqui vai uma lista de alguns dos meus projetos e experimentos.",
         "items": {
+            "ai-chat": {
+                "displayName": "AI Chat",
+                "description": "Uma aplicação de chat com IA construída com JavaScript. Feita como atividade de fundamentos web."
+            },
             "plumber-website": {
                 "displayName": "Atividade: site para encanador",
                 "description": "Um site simples para um encanador. Feito como atividade de fundamentos web."

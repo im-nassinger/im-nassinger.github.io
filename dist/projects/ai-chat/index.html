@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Document</title>
+        
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="./styles/global.css">
+
+        <script src="./scripts/main.js" defer></script>
+    </head>
+    <body class="loading">
+        <div class="loading-screen">
+            <span class="title">Carregando...</span>
+            <span class="description">
+                Olá professor!
+                Escolhi a API de IA generativa do Google e criei um backend simples hospedado na render.com para evitar expor as chaves no frontend. O frontend está no GitHub Pages. Como a Render coloca servidores gratuitos em modo "sleep", o backend pode demorar até 1 minuto para iniciar.
+            </span>
+        </div>
+        <div class="chat">
+            <div class="header">
+                <div class="title-wrap">
+                    <span class="title">GPT</span>
+                    <span class="typing-indicator">Digitando...</span>
+                </div>
+                <div class="models">
+                    <select name="model-select">
+                        <option value="" disabled selected>Carregando...</option>
+                    </select>
+                </div>
+            </div>
+            <div class="messages">
+                
+            </div>
+            <div class="bottom-container">
+                <input type="text" placeholder="Digite sua mensagem..." name="message" autocomplete="off"/>
+                <button class="send-button">Enviar</button>
+            </div>
+        </div>
+    </body>
+</html>

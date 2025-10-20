@@ -1,5 +1,15 @@
 [
     {
+        "projectName": "ai-chat",
+        "technologies": [
+            "html",
+            "css",
+            "js"
+        ],
+        "url": "https://nassinger.com/projects/ai-chat",
+        "activity": true
+    },
+    {
         "projectName": "plumber-website",
         "technologies": [
             "html",

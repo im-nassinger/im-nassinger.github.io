@@ -27,6 +27,10 @@
         "title": "Projects",
         "description": "Here is a list of some of my projects and experiments.",
         "items": {
+            "ai-chat": {
+                "displayName": "AI Chat",
+                "description": "An AI chat application built with JavaScript. Made as a web fundamentals activity."
+            },
             "plumber-website": {
                 "displayName": "Assignment: Plumber Website",
                 "description": "A simple website for a plumber. Made as a web fundamentals activity."
