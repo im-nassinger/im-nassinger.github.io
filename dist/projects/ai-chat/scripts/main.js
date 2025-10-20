@@ -149,11 +149,18 @@ async function sendUserMessage(message) {
 function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
-
 async function checkServerAvailability() {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 3000);
+
     try {
         const apiURL = getApiURL();
-        const response = await fetch(apiURL + '/api/status');
+        const response = await fetch(apiURL + '/api/status', {
+            signal: controller.signal
+        });
+
+        clearTimeout(timeout);
+
         const { status } = await response.json();
 
         if (status !== 'ok') {
@@ -164,14 +171,14 @@ async function checkServerAvailability() {
 
         document.body.classList.remove('loading');
     } catch (error) {
+        clearTimeout(timeout);
+        
         const loadingScreen = document.querySelector('.loading-screen');
-
         loadingScreen.classList.add('show');
 
         console.warn('Server not available, retrying in 1 second...');
 
         await sleep(1000);
-
         await checkServerAvailability();
     }
 }
