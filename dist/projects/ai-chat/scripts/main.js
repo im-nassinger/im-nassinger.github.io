@@ -164,6 +164,10 @@ async function checkServerAvailability() {
 
         document.body.classList.remove('loading');
     } catch (error) {
+        const loadingScreen = document.querySelector('.loading-screen');
+
+        loadingScreen.classList.add('show');
+
         console.warn('Server not available, retrying in 1 second...');
 
         await sleep(1000);
@@ -206,10 +210,6 @@ async function fetchAvailableModels() {
 
         setLocalModels(models);
     } catch (error) {
-        const loadingScreen = document.querySelector('.loading-screen');
-
-        loadingScreen.classList.add('show');
-
         console.error('Error fetching models:', error);
 
         alert('Erro ao buscar modelos disponíveis. Por favor, tente novamente.');
