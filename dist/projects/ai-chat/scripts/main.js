@@ -185,10 +185,10 @@ function setLocalModels(models) {
     for (let i = 0; i < models.length; i++) {
         const model = models[i];
         const optionElement = document.createElement('option');
-        
+
         optionElement.value = model;
         optionElement.textContent = model;
-        
+
         if (i === 0) {
             optionElement.selected = true;
             selectedModel = model;
@@ -206,6 +206,10 @@ async function fetchAvailableModels() {
 
         setLocalModels(models);
     } catch (error) {
+        const loadingScreen = document.querySelector('.loading-screen');
+
+        loadingScreen.classList.add('show');
+
         console.error('Error fetching models:', error);
 
         alert('Erro ao buscar modelos disponíveis. Por favor, tente novamente.');
@@ -213,10 +217,6 @@ async function fetchAvailableModels() {
 }
 
 async function main() {
-    const loadingScreen = document.querySelector('.loading-screen');
-
-    loadingScreen.classList.add('show');
-
     await checkServerAvailability();
 
     fetchAvailableModels();
