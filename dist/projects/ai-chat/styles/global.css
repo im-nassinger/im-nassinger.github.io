@@ -36,13 +36,15 @@ body {
     height: 100dvh;
     overflow: hidden;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
+    gap: 4rem;
+    flex-wrap: wrap;
+    justify-content: center;
     padding: 2rem;
     background: var(--bg-1);
+    overflow-y: scroll;
 
-    &.loading .chat,
+    &.loading *,
     &:not(.loading) .loading-screen {
         display: none;
     }
@@ -177,6 +179,8 @@ button {
             padding: 3rem;
             width: fit-content;
             border-radius: var(--radius);
+            max-width: 100%;
+            overflow: clip;
             
             &.assistant {
                 border-top-left-radius: 0.5rem;
@@ -195,15 +199,6 @@ button {
                 font-weight: 400;
                 color: var(--fg-1);
             }
-        }
-
-        &::-webkit-scrollbar {
-            width: var(--scrollbar-width);
-        }
-
-        &::-webkit-scrollbar-thumb {
-            background: var(--bg-4);
-            border-radius: var(--radius);
         }
     }
 
@@ -237,4 +232,86 @@ button {
             }
         }
     }
+}
+
+.logs {
+    width: 100%;
+    max-width: 42rem;
+    height: 50rem;
+    border-radius: var(--radius);
+    border: 0.2rem solid var(--fg-1);
+    overflow: hidden;
+
+    .logs-scroller {
+        width: 100%;
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .log {
+        width: 100%;
+        padding: 2rem;
+        padding-left: 3rem;
+        padding-top: 4rem;
+        display: flex;
+        gap: 2rem;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+
+        &:nth-child(2n) {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .date {
+            position: absolute;
+            top: 2rem;
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--fg-2);
+        }
+
+        .text {
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: var(--fg-1);
+            max-width: calc(100% - 7rem);
+        }
+
+        .delete-button {
+            width: 5rem;
+            height: 5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+            gap: 2rem;
+            margin-bottom: auto;
+            background: rgb(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            transition: background-color .25s ease-in-out;
+            
+            svg {
+                width: 2.4rem;
+                height: 2.4rem;
+                color: var(--fg-1);
+            }
+
+            &:hover {
+                background: rgb(200, 40, 100);
+            }
+        }
+    }
+}
+
+::-webkit-scrollbar {
+    width: var(--scrollbar-width);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--bg-4);
+    border-radius: var(--radius);
 }
