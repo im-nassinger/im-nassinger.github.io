@@ -44,7 +44,7 @@ body {
     background: var(--bg-1);
     overflow-y: scroll;
 
-    &.loading *,
+    &.loading .chat, &.loading .logs,
     &:not(.loading) .loading-screen {
         display: none;
     }
