@@ -2,7 +2,6 @@ import { SmoothScrollContext } from '@/contexts/SmoothScrollContext';
 import { useNavigate } from '@/hooks/router';
 import { getCurrentLocation } from '@/utils/misc/getCurrentLocation';
 import { fixedTimeStep } from '@/utils/timing/fixedTimeStep';
-import { nextTick } from '@/utils/timing/nextTick';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import SimpleBar from 'simplebar-react';
 import './SmoothScrollProvider.css';
@@ -42,7 +41,9 @@ export function SmoothScrollProvider(props: SmoothScrollProviderProps) {
     const [container, setContainer] = useState<HTMLDivElement | null>(null);
     const justEntered = useRef(true);
     const lastId = useRef<string | null>(null);
-    const ignoreNativeScroll = useRef(false);
+    // the scroll position set by the animation. scroll events that land on it were caused by the
+    // animation itself, not by the user, so they must not cancel it.
+    const animatedScrollTop = useRef<number | null>(null);
     const activeScroll = useRef<ReturnType<typeof animateScroll> | null>(null);
     const hash = useRef(getCurrentLocation().hash);
     const navigate = useNavigate();
@@ -69,11 +70,11 @@ export function SmoothScrollProvider(props: SmoothScrollProviderProps) {
 
             container.scrollTo({ top: value, behavior: 'instant' });
 
-            ignoreNativeScroll.current = true;
+            const hasFinished = progress >= 1;
 
-            nextTick(() => ignoreNativeScroll.current = false);
+            animatedScrollTop.current = hasFinished ? null : container.scrollTop;
 
-            if (progress >= 1) animation?.cancel();
+            if (hasFinished) animation?.cancel();
         };
 
         animation = fixedTimeStep(update, null, 60, 'smooth-scroll');
@@ -145,11 +146,12 @@ export function SmoothScrollProvider(props: SmoothScrollProviderProps) {
         ];
 
         const onScroll = () => {
-            if (ignoreNativeScroll.current) {
-                ignoreNativeScroll.current = false;
-                return;
-            }
+            const isAnimatedScroll = animatedScrollTop.current !== null
+                && Math.abs(container.scrollTop - animatedScrollTop.current) < 1;
 
+            if (isAnimatedScroll) return;
+
+            animatedScrollTop.current = null;
             activeScroll.current?.cancel();
 
             const currentLocationId = getCurrentLocation().hash.slice(1);
