@@ -23,7 +23,14 @@ export type LogoProps = {
         width?: number;
         height?: number;
         verticeList?: ComponentProps<typeof Polygon>['vertices'][];
+        circleList?: LogoCircle[];
     }
+};
+
+export type LogoCircle = {
+    x: number;
+    y: number;
+    radius: number;
 };
 
 function LogoFixture(props: LogoProps) {
@@ -34,7 +41,7 @@ function LogoFixture(props: LogoProps) {
         ...props.fixtureProps
     } as ComponentProps<typeof Fixture>;
 
-    const { type, verticeList, radius, width, height } = props.shapeProps;
+    const { type, verticeList, circleList, radius, width, height } = props.shapeProps;
 
     if (type === 'polygon') {
         if (!verticeList) return null;
@@ -45,6 +52,14 @@ function LogoFixture(props: LogoProps) {
             </Fixture>
         ));
     } else if (type === 'circle') {
+        if (circleList) {
+            return circleList.map((circle, index) => (
+                <Fixture key={index} {...fixtureProps}>
+                    <Circle x={circle.x} y={circle.y} radius={circle.radius} />
+                </Fixture>
+            ));
+        }
+
         return (
             <Fixture {...fixtureProps}>
                 <Circle radius={radius ?? 0.5} />

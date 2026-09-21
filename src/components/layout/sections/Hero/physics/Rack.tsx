@@ -35,7 +35,7 @@ function shuffleArray(array: any[]) {
     return result;
 }
 
-function getRackWidthFor(n: number) {
+export function getRackWidthFor(n: number) {
     const d = Math.sqrt(1 + 8 * n);
     return Math.ceil((d - 1) / 2);
 }

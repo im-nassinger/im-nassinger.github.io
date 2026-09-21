@@ -8,9 +8,44 @@ import { getCssVar } from '@/utils/dom/getCssVar';
 import { lerp } from '@/utils/math/lerp';
 import { memo, useEffect, useState } from 'react';
 import { debugPhysics, physicsWorldOptions, pixelsPerMeter, rackItemRadius, worldGravity } from './config';
-import { Css3Logo, DenoLogo, GitHubLogo, GitLogo, Html5Logo, JavaScriptLogo, NodeLogo, ReactLogo, TypeScriptLogo, VSCodeLogo } from './logos';
-import { Rack } from './Rack';
+import {
+    CLogo,
+    Css3Logo,
+    DenoLogo,
+    EspressifLogo,
+    GitHubLogo,
+    GitLogo,
+    Html5Logo,
+    JavaScriptLogo,
+    LuaLogo,
+    NodeLogo,
+    PostgreSQLLogo,
+    PythonLogo,
+    ReactLogo,
+    TypeScriptLogo,
+    VSCodeLogo
+} from './logos';
+import { getRackWidthFor, Rack } from './Rack';
 import { Walls } from './Walls';
+
+// the rack fills from the bottom row up, so the first logos end up at the base of the triangle.
+const rackLogos = [
+    PythonLogo,
+    LuaLogo,
+    CLogo,
+    EspressifLogo,
+    PostgreSQLLogo,
+    ReactLogo,
+    NodeLogo,
+    VSCodeLogo,
+    DenoLogo,
+    JavaScriptLogo,
+    GitHubLogo,
+    GitLogo,
+    Html5Logo,
+    Css3Logo,
+    TypeScriptLogo
+];
 
 const getBodyPaddingVariables = () => {
     const itemSidePaddingString = getCssVar('--item-side-padding');
@@ -47,7 +82,7 @@ const computeRackX = () => {
     const paddingInMeters = (appSidePadding + itemSidePadding) / pixelsPerMeter;
 
     const rightX = window.innerWidth / pixelsPerMeter / 2;
-    const itemsAtBottom = 4;
+    const itemsAtBottom = getRackWidthFor(rackLogos.length);
     const rackWidth = rackItemRadius * 2 * itemsAtBottom;
 
     return rightX - paddingInMeters - rackWidth / 2;
@@ -101,16 +136,7 @@ export const Physics = memo(() => {
             >
                 <World gravity={worldGravity} bullet={true} {...physicsWorldOptions} ref={physicsWorldRef}>
                     <Rack x={0} y={0} radius={rackItemRadius} suffle={false}>
-                        <ReactLogo />
-                        <NodeLogo />
-                        <VSCodeLogo />
-                        <DenoLogo />
-                        <JavaScriptLogo />
-                        <GitHubLogo />
-                        <GitLogo />
-                        <Html5Logo />
-                        <Css3Logo />
-                        <TypeScriptLogo />
+                        {rackLogos.map((RackLogo, index) => <RackLogo key={index} />)}
                     </Rack>
 
                     <Walls offsetX={rackX} offsetY={0} />

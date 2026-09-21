@@ -38,6 +38,11 @@ export { default as Deno } from './svg/logos/deno.svg';
 export { default as Css3 } from './svg/logos/css3.svg';
 export { default as VSCode } from './svg/logos/vscode.svg';
 export { default as LinkedIn } from './svg/logos/linkedin.svg';
+export { default as Python } from './svg/logos/python.svg';
+export { default as Lua } from './svg/logos/lua.svg';
+export { default as CLanguage } from './svg/logos/c.svg';
+export { default as Espressif } from './svg/logos/espressif.svg';
+export { default as PostgreSQL } from './svg/logos/postgresql.svg';
 
 // here I'm exporting a memoized version of each image.
 export const HashtagIcon = memo(_HashtagIcon);
