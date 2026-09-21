@@ -1,13 +1,33 @@
-import { FixtureContext } from '@/contexts/PhysicsContext';
-import { useObjectRef } from '@/hooks/useObjectRef';
-import { PlanckRef } from '@/hooks/usePlanckRef';
-import * as planck from 'planck';
+import { FixtureContext } from '@/contexts/PhysicsContext.ts';
+import { useObjectRef } from '@/hooks/useObjectRef.ts';
 import { memo, useContext, useEffect } from 'react';
-import { RenderableShapeDef } from '../utils/CanvasRenderer.types';
+import type { PhysicsUserData, Vector } from '../engine/index.ts';
 
-type PolygonProps = Partial<RenderableShapeDef> & {
-    vertices: planck.Vec2Value[] | planck.Vec2Value[][] | number[] | number[][];
-    ref?: PlanckRef<planck.PolygonShape | null>;
+type PolygonProps = {
+    vertices: Vector[] | Vector[][] | number[] | number[][];
+    userData?: PhysicsUserData;
+};
+
+// Accepts either vector objects or flat [x, y] number pairs.
+function toVectors(vertices: PolygonProps['vertices']) {
+    const flatVertices = vertices.flat();
+    const result: Vector[] = [];
+
+    for (let i = 0; i < flatVertices.length; i++) {
+        const item = flatVertices[i];
+
+        if (typeof item !== 'number') {
+            result.push({ x: item.x, y: item.y });
+            continue;
+        }
+
+        const y = flatVertices[i + 1] as number;
+
+        result.push({ x: item, y });
+        i++;
+    }
+
+    return result;
 }
 
 export const Polygon = memo((props: PolygonProps) => {
@@ -21,38 +41,10 @@ export const Polygon = memo((props: PolygonProps) => {
     const stableProps = useObjectRef(props);
 
     useEffect(() => {
-        const flatVertices = stableProps.vertices.flat();
-        const vertices: planck.Vec2Value[] = [];
-
-        for (let i = 0; i < flatVertices.length; i ++) {
-            let currItem = flatVertices[i],
-                nextItem = flatVertices[i + 1],
-                x = 0, y = 0;
-
-            if (typeof currItem === 'number') {
-                x = currItem as number;
-                y = nextItem as number;
-                i ++;
-            } else {
-                x = currItem.x;
-                y = currItem.y;
-            }
-
-            vertices.push(new planck.Vec2(x, y));
-        }
-
-        const planckPolygon = new planck.PolygonShape(vertices);
-
-        if (stableProps.userData) {
-            Object.assign(planckPolygon, {
-                // only box2d v3 supports userData in shapes.
-                m_userData: stableProps.userData
-            });
-        }
-
-        setShape(planckPolygon);
-
-        if (stableProps.ref) stableProps.ref.current = planckPolygon;
+        setShape({
+            geometry: { type: 'polygon', vertices: toVectors(stableProps.vertices) },
+            userData: stableProps.userData
+        });
     }, [setShape, stableProps]);
 
     return null;

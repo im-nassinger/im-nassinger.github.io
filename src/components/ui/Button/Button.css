@@ -5,7 +5,10 @@
     flex-shrink: 0;
     font-size: 1.6rem;
     font-weight: 500;
-    color: var(--fg-1);
+    --button-color: var(--fg-1);
+    --button-highlight-color: var(--main-color);
+    color: color-mix(in srgb, var(--button-color), var(--button-highlight-color) calc(var(--hover-progress) * 100%));
+    transition: --hover-progress var(--fast-duration) var(--easing);
 
     .icons {
         display: flex;
@@ -17,7 +20,7 @@
 
         .icon {
             position: absolute;
-            transition-property: transform, opacity, color;
+            transition-property: transform, opacity;
             transition-duration: var(--fast-duration);
             transition-timing-function: var(--easing);
         }
@@ -31,10 +34,5 @@
     .icon {
         width: var(--regular-icon-size);
         height: var(--regular-icon-size);
-    }
-
-    .icon,
-    .text {
-        transition: color var(--fast-duration) var(--easing);
     }
 }

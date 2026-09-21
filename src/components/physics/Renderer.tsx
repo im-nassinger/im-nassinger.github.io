@@ -1,18 +1,18 @@
-import { RendererContext } from '@/contexts/PhysicsContext';
-import { useObjectRef } from '@/hooks/useObjectRef';
-import { PlanckRef } from '@/hooks/usePlanckRef';
-import * as planck from 'planck';
+import { RendererContext } from '@/contexts/PhysicsContext.ts';
+import { useObjectRef } from '@/hooks/useObjectRef.ts';
+import type { PhysicsRef } from '@/hooks/usePhysicsRef.ts';
 import { memo, useEffect, useMemo, useRef, useState } from 'react';
-import { CanvasRenderer } from './utils/CanvasRenderer';
-import { CanvasRendererOptions } from './utils/CanvasRenderer.types';
+import type { PhysicsWorld } from './engine/index.ts';
+import { CanvasRenderer } from './utils/CanvasRenderer.ts';
+import type { CanvasRendererOptions } from './utils/CanvasRenderer.types.ts';
 
 type RendererProps = DeepPartial<CanvasRendererOptions> & {
     children?: React.ReactNode;
-    ref?: PlanckRef<CanvasRenderer | null>;
-}
+    ref?: PhysicsRef<CanvasRenderer | null>;
+};
 
 export const Renderer = memo((props: RendererProps) => {
-    const [world, setWorld] = useState<planck.World | null>(null);
+    const [world, setWorld] = useState<PhysicsWorld | null>(null);
     const [renderer, setRenderer] = useState<CanvasRenderer | null>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const stableProps = useObjectRef(props);

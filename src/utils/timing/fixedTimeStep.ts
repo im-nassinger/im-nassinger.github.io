@@ -1,9 +1,17 @@
+import { isLoopPaused, profile, registerLoop } from '@/utils/profiler/profiler.ts';
+
+const maxStepsPerFrame = 5;
+
 export function fixedTimeStep(
     updateCallback: () => void,
     renderCallback?: (() => void) | null,
     targetFps?: number,
-    _id?: string
+    id?: string
 ) {
+    const loopId = id ?? 'anonymous-loop';
+    const updateSectionName = `${loopId}:update`;
+    const renderSectionName = `${loopId}:render`;
+
     if (!targetFps) {
         updateCallback();
         renderCallback?.();
@@ -13,6 +21,8 @@ export function fixedTimeStep(
     targetFps = targetFps || 60;
 
     const targetInterval = 1000 / targetFps;
+
+    registerLoop(loopId);
 
     let lastTime = 0,
         accumulatedTime = 0,
@@ -45,15 +55,27 @@ export function fixedTimeStep(
         const deltaTime = currentTime - lastTime;
 
         lastTime = currentTime;
-        accumulatedTime += deltaTime;
+        animationId = requestAnimationFrame(step);
 
-        while (accumulatedTime >= targetInterval) {
-            updateCallback();
-            renderCallback?.();
-            accumulatedTime -= targetInterval;
+        if (isLoopPaused(loopId)) {
+            accumulatedTime = 0;
+            return;
         }
 
-        animationId = requestAnimationFrame(step);
+        accumulatedTime += deltaTime;
+
+        let stepCount = 0;
+
+        while (accumulatedTime >= targetInterval && stepCount < maxStepsPerFrame) {
+            profile(updateSectionName, updateCallback);
+            accumulatedTime -= targetInterval;
+            stepCount++;
+        }
+
+        // Drops the backlog after a long stall instead of trying to catch up (spiral of death).
+        if (stepCount === maxStepsPerFrame) accumulatedTime = 0;
+
+        if (stepCount > 0 && renderCallback) profile(renderSectionName, renderCallback);
     }
 
     animationId = requestAnimationFrame(step);

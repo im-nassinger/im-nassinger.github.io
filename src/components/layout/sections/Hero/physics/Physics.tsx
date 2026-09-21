@@ -1,18 +1,16 @@
 import { EasyMouseJoint, Renderer, World } from '@/components/physics';
-import { CanvasRenderer } from '@/components/physics/utils/CanvasRenderer';
-import { usePlanckRef } from '@/hooks/usePlanckRef';
+import type { CanvasRenderer, PhysicsWorld } from '@/components/physics';
+import { usePhysicsRef } from '@/hooks/usePhysicsRef.ts';
+import { registerDebugHandle } from '@/utils/profiler/profiler.ts';
 import { useWindowSize } from '@/hooks/useWindowSize';
 import { clamp } from '@/utils/math/clamp';
 import { getCssVar } from '@/utils/dom/getCssVar';
 import { lerp } from '@/utils/math/lerp';
-import * as planck from 'planck';
 import { memo, useEffect, useState } from 'react';
-import { pixelsPerMeter, rackItemRadius, worldGravity } from './config';
+import { debugPhysics, physicsWorldOptions, pixelsPerMeter, rackItemRadius, worldGravity } from './config';
 import { Css3Logo, DenoLogo, GitHubLogo, GitLogo, Html5Logo, JavaScriptLogo, NodeLogo, ReactLogo, TypeScriptLogo, VSCodeLogo } from './logos';
 import { Rack } from './Rack';
 import { Walls } from './Walls';
-
-planck.Settings.maxPolygonVertices = 50;
 
 const getBodyPaddingVariables = () => {
     const itemSidePaddingString = getCssVar('--item-side-padding');
@@ -56,25 +54,29 @@ const computeRackX = () => {
 };
 
 export const Physics = memo(() => {
-    const planckWorldRef = usePlanckRef<planck.World | null>(null);
-    const rendererRef = usePlanckRef<CanvasRenderer | null>(null);
+    const physicsWorldRef = usePhysicsRef<PhysicsWorld | null>(null);
+    const rendererRef = usePhysicsRef<CanvasRenderer | null>(null);
     const [rackX, setRackX] = useState(computeRackX());
     const windowSize = useWindowSize();
 
     useEffect(() => {
-        const planckWorld = planckWorldRef.current;
+        const physicsWorld = physicsWorldRef.current;
         const renderer = rendererRef.current;
 
-        if (!planckWorld || !renderer) return;
+        if (!physicsWorld || !renderer) return;
 
-        const mouseJoint = new EasyMouseJoint(planckWorld, { renderer });
+        const mouseJoint = new EasyMouseJoint(physicsWorld, { renderer });
 
         mouseJoint.setupEvents();
+
+        // lets the profiler's automated test start the simulation and keep the logos moving.
+        registerDebugHandle('physicsWorld', physicsWorld);
+        registerDebugHandle('physicsRenderer', renderer);
 
         return () => {
             mouseJoint.removeEvents();
         };
-    }, [planckWorldRef, rendererRef]);
+    }, [physicsWorldRef, rendererRef]);
 
     useEffect(() => {
         const renderer = rendererRef.current;
@@ -93,10 +95,11 @@ export const Physics = memo(() => {
         <>
             <Renderer
                 pixelsPerMeter={pixelsPerMeter}
+                debug={debugPhysics}
                 ref={rendererRef}
                 default={{ strokeStyle: 'transparent', lineWidth: 4 }}
             >
-                <World gravity={worldGravity} bullet={true} ref={planckWorldRef}>
+                <World gravity={worldGravity} bullet={true} {...physicsWorldOptions} ref={physicsWorldRef}>
                     <Rack x={0} y={0} radius={rackItemRadius} suffle={false}>
                         <ReactLogo />
                         <NodeLogo />

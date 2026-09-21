@@ -54,7 +54,7 @@
                     height: 8rem;
 
                     &.active {
-                        color: var(--main-color);
+                        --hover-progress: 1;
                     }
                 }
             }

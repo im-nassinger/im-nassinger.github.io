@@ -6,6 +6,7 @@ import { nextTick } from '@/utils/timing/nextTick';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import SimpleBar from 'simplebar-react';
 import './SmoothScrollProvider.css';
+import { profile } from '@/utils/profiler/profiler.ts';
 
 export type ScrollToTarget = number | HTMLElement | string;
 
@@ -75,7 +76,7 @@ export function SmoothScrollProvider(props: SmoothScrollProviderProps) {
             if (progress >= 1) animation?.cancel();
         };
 
-        animation = fixedTimeStep(update, null, 60, 'SmoothScrollProvider');
+        animation = fixedTimeStep(update, null, 60, 'smooth-scroll');
 
         return animation;
     }, []);
@@ -188,7 +189,7 @@ export function SmoothScrollProvider(props: SmoothScrollProviderProps) {
         const { signal } = ctrl;
         const options = { signal, passive: true };
 
-        container.addEventListener('scroll', onScroll, options);
+        container.addEventListener('scroll', () => profile('scroll:smooth-scroll-provider', onScroll), options);
         container.addEventListener('wheel', cancelScroll, options);
         container.addEventListener('touchmove', cancelScroll, options);
 

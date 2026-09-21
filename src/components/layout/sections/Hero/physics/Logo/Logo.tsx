@@ -1,8 +1,8 @@
 import { Body, Box, Circle, Fixture, Polygon } from '@/components/physics';
 import { Attributes, useMemoImage } from '@/hooks/useMemoImage';
 import { useObjectRef } from '@/hooks/useObjectRef';
-import { usePlanckRef } from '@/hooks/usePlanckRef';
-import * as planck from 'planck';
+import { usePhysicsRef } from '@/hooks/usePhysicsRef.ts';
+import type { PhysicsBody } from '@/components/physics';
 import { ComponentProps, memo, useEffect, useRef } from 'react';
 
 export type LogoProps = {
@@ -64,7 +64,7 @@ function LogoFixture(props: LogoProps) {
 
 export const Logo = memo((props: LogoProps) => {
     const stableProps = useObjectRef(props);
-    const bodyRef = usePlanckRef<planck.Body | null>(null);
+    const bodyRef = usePhysicsRef<PhysicsBody | null>(null);
 
     // Baking the SVG image into a bitmap for better performance :p
     const image = useMemoImage({
@@ -91,10 +91,8 @@ export const Logo = memo((props: LogoProps) => {
         const body = bodyRef.current;
         if (!body) return;
 
-        const userData = body.getUserData() as any;
-
-        userData.render.image = image;
-        bodyProps.current.userData = userData;
+        body.userData.render = { ...body.userData.render, image };
+        bodyProps.current.userData = body.userData;
     }, [ bodyRef, image ]);
     
     if (!bodyProps) return null;

@@ -1,46 +1,49 @@
-import { Body, MouseJoint, MouseJointOpt, World } from 'planck';
-import { CanvasRenderer } from './CanvasRenderer';
-import { RenderOptions, RenderableJointDef } from './CanvasRenderer.types';
+import type { JointId, PhysicsBody, PhysicsWorld, Vector } from '../engine/index.ts';
+import type { CanvasRenderer } from './CanvasRenderer.ts';
+import { profile } from '@/utils/profiler/profiler.ts';
 
 export type GenericMouseEvent = {
-    position: { x: number; y: number };
+    position: Vector;
 };
 
 export type EasyMouseJointOptions = {
-    jointDef?: MouseJointOpt;
     renderer: CanvasRenderer;
-    render?: RenderOptions;
-} & Partial<RenderableJointDef>;
+    maxForce?: number;
+    hertz?: number;
+    dampingRatio?: number;
+};
 
+type ActiveDrag = {
+    mouseBody: PhysicsBody;
+    jointId: JointId;
+    target: Vector;
+};
+
+// Box2D v3 has no mouse joint: dragging uses a kinematic body that follows the cursor,
+// attached to the grabbed body by a motor joint acting as a spring.
 export class EasyMouseJoint {
-    world: World;
+    world: PhysicsWorld;
     options: EasyMouseJointOptions;
-    jointDef: MouseJoint | null = null;
+    drag: ActiveDrag | null = null;
     cursorPosition = { x: 0, y: 0 };
     abortController?: AbortController;
-    hoveringBody: Body | null = null;
+    hoveringBody: PhysicsBody | null = null;
+    removeStepListener: (() => void) | null = null;
 
-    constructor(world: World, options: EasyMouseJointOptions) {
+    constructor(world: PhysicsWorld, options: EasyMouseJointOptions) {
         this.world = world;
         this.options = options;
     }
 
-    getBodyAt(position: { x: number; y: number }) {
-        let foundFixture;
-
-        for (let body = this.world.getBodyList(); body; body = body.getNext()) {
-            for (let fixture = body.getFixtureList(); fixture; fixture = fixture.getNext()) {
-                const hit = fixture.testPoint(position);
-                if (hit) foundFixture = fixture;
-            }
-        }
-
-        if (!foundFixture) return;
-
-        return foundFixture.getBody();
+    getBodyName(body: PhysicsBody) {
+        return body.userData.name || null;
     }
 
-    setHoveringBody(body: Body | null) {
+    getBodyAt(position: Vector) {
+        return this.world.findBodyAt(position, (body) => !!this.getBodyName(body));
+    }
+
+    setHoveringBody(body: PhysicsBody | null) {
         this.hoveringBody = body;
 
         document.body.classList.toggle('hovering-body', !!body);
@@ -62,76 +65,70 @@ export class EasyMouseJoint {
         const body = this.getBodyAt(position);
         if (!body) return;
 
-        const name = this.getBodyName(body);
-        if (!name) return;
-
         this.setHoveringBody(body);
 
-        const jointDef = this.options.jointDef ?? {};
+        const { maxForce = 5000, hertz = 5, dampingRatio = 0.7 } = this.options;
 
-        jointDef.maxForce = jointDef.maxForce ?? 5000;
+        const mouseBody = this.world.createBody({
+            type: 'kinematic',
+            position,
+            bullet: false,
+            enableSleep: false
+        });
 
-        if (this.options.userData) {
-            jointDef.userData = {
-                ...jointDef.userData,
-                ...this.options.userData
-            };
-        }
+        const jointId = this.world.createSpringJoint({
+            bodyA: mouseBody,
+            bodyB: body,
+            localAnchorB: body.toLocalPoint(position),
+            hertz,
+            dampingRatio,
+            maxForce
+        });
 
-        this.jointDef = new MouseJoint(
-            jointDef,
-            this.world.createBody(),
-            body,
-            {
-                x: position.x,
-                y: position.y
-            }
-        );
+        this.drag = { mouseBody, jointId, target: { ...position } };
 
-        this.world.createJoint(this.jointDef);
-    };
-
-    getBodyName(body: Body) {
-        const userData = body.getUserData() as { name?: string };
-        if (!userData) return null;
-        return userData.name || null;
+        this.removeStepListener = this.world.addStepListener((timeStep) => {
+            if (!this.drag) return;
+            this.world.setKinematicTarget(this.drag.mouseBody, this.drag.target, timeStep);
+        });
     }
 
     onMouseMove({ position }: GenericMouseEvent) {
         this.cursorPosition.x = position.x;
         this.cursorPosition.y = position.y;
 
-        if (this.jointDef) {
-            this.jointDef.setTarget(position);
-        } else {
-            const body = this.getBodyAt(position);
-
-            if (!body) return;
-
-            if (this.hoveringBody === body) return;
-
-            const name = this.getBodyName(body);
-
-            if (!name) return;
-
-            this.onHoverBody(body);
+        if (this.drag) {
+            this.drag.target.x = position.x;
+            this.drag.target.y = position.y;
+            return;
         }
+
+        const body = this.getBodyAt(position);
+
+        if (!body) return;
+        if (this.hoveringBody === body) return;
+
+        this.onHoverBody(body);
     }
 
-    onHoverBody(_body: Body) {
-        for (let b = this.world.getBodyList(); b; b = b.getNext()) {
-            const name = this.getBodyName(b);
-            if (!name) continue;
+    onHoverBody(_body: PhysicsBody) {
+        for (const body of this.world.bodies) {
+            if (!this.getBodyName(body)) continue;
 
-            b.setDynamic();
+            body.setType('dynamic');
         }
     }
 
     onMouseUp() {
-        if (!this.jointDef) return;
+        if (!this.drag) return;
 
-        this.world.destroyJoint(this.jointDef);
-        this.jointDef = null;
+        this.removeStepListener?.();
+        this.removeStepListener = null;
+
+        this.world.destroyJoint(this.drag.jointId);
+        this.world.destroyBody(this.drag.mouseBody);
+
+        this.drag = null;
         this.setHoveringBody(null);
     }
 
@@ -155,7 +152,7 @@ export class EasyMouseJoint {
         }, { signal });
 
         document.addEventListener('pointermove', (event) => {
-            this.onMouseMove({ position: getEventPosition(event) });
+            profile('physics:pointer-move', () => this.onMouseMove({ position: getEventPosition(event) }));
         }, { signal });
 
         document.addEventListener('pointerup', () => {
@@ -176,6 +173,7 @@ export class EasyMouseJoint {
     }
 
     removeEvents() {
+        this.onMouseUp();
         this.abortController?.abort();
     }
 };

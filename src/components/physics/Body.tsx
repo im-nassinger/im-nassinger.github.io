@@ -1,16 +1,16 @@
-import { BodyContext, WorldContext } from '@/contexts/PhysicsContext';
-import { useObjectRef } from '@/hooks/useObjectRef';
-import { PlanckRef } from '@/hooks/usePlanckRef';
-import * as planck from 'planck';
-import { memo, ReactNode, useContext, useEffect, useState } from 'react';
-import type { RenderableBody, RenderableBodyDef } from './utils/CanvasRenderer.types';
+import { BodyContext, WorldContext } from '@/contexts/PhysicsContext.ts';
+import { useObjectRef } from '@/hooks/useObjectRef.ts';
+import type { PhysicsRef } from '@/hooks/usePhysicsRef.ts';
+import { memo, useContext, useEffect, useState } from 'react';
+import type { ReactNode } from 'react';
+import type { BodyOptions, PhysicsBody } from './engine/index.ts';
 
-type BodyProps = Partial<RenderableBodyDef> & {
+type BodyProps = BodyOptions & {
     x?: number;
     y?: number;
     children: ReactNode;
-    ref?: PlanckRef<planck.Body | null>;
-}
+    ref?: PhysicsRef<PhysicsBody | null>;
+};
 
 export const Body = memo((props: BodyProps) => {
     const worldCtx = useContext(WorldContext);
@@ -20,26 +20,21 @@ export const Body = memo((props: BodyProps) => {
     }
 
     const { world } = worldCtx;
-    const [body, setBody] = useState<RenderableBody | null>(null);
+    const [body, setBody] = useState<PhysicsBody | null>(null);
     const stableProps = useObjectRef(props);
 
     useEffect(() => {
-        const position = stableProps.position ?? new planck.Vec2(stableProps.x ?? 0, stableProps.y ?? 0);
-        const bodyDef = { ...stableProps, position };
+        const { type, angle, bullet, enableSleep, userData } = stableProps;
+        const position = stableProps.position ?? { x: stableProps.x ?? 0, y: stableProps.y ?? 0 };
 
-        delete bodyDef.x;
-        delete bodyDef.y;
+        const physicsBody = world.createBody({ type, position, angle, bullet, enableSleep, userData });
 
-        bodyDef.bullet = bodyDef.bullet ?? world.bullet ?? false;
-        
-        const planckBody = world.createBody(bodyDef);
+        setBody(physicsBody);
 
-        setBody(planckBody);
-
-        if (stableProps.ref) stableProps.ref.current = planckBody;
+        if (stableProps.ref) stableProps.ref.current = physicsBody;
 
         return () => {
-            world.destroyBody(planckBody);
+            world.destroyBody(physicsBody);
         };
     }, [world, stableProps]);
 

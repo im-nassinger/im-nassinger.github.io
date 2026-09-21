@@ -112,30 +112,30 @@
     position: relative;
     background-color: var(--main-color);
     color: var(--bg-1) !important;
-    box-shadow: 0 0 3rem color-mix(in srgb, var(--main-color), transparent 88%);
+    box-shadow: 0 0 calc(3rem + var(--hover-progress) * 1rem) color-mix(in srgb, var(--main-color), transparent calc(88% - var(--hover-progress) * 8%));
 
-    transition-property: transform, box-shadow;
+    transition-property: transform, --hover-progress;
     transition-duration: var(--fast-duration);
     transition-timing-function: var(--easing);
 
     &:hover {
         transform: translateY(-0.2rem);
-        box-shadow: 0 0 4rem color-mix(in srgb, var(--main-color), transparent 80%);
+        --hover-progress: 1;
     }
 }
 
 .see-projects-btn {
-    background-color: color-mix(in srgb, var(--main-color), var(--bg-1) calc(98% - var(--opacity-mult) * 4%));
+    background-color: color-mix(in srgb, var(--main-color), var(--bg-1) calc(98% - var(--opacity-mult) * (4% + var(--hover-progress) * 2.5%)));
     backdrop-filter: blur(4rem);
     color: var(--main-color);
 
-    transition-property: transform, background-color;
+    transition-property: transform, --hover-progress;
     transition-duration: var(--fast-duration);
     transition-timing-function: var(--easing);
 
     &:hover {
         transform: translateY(-0.2rem);
-        background-color: color-mix(in srgb, var(--main-color), var(--bg-1) calc(98% - var(--opacity-mult) * 6.5%));
+        --hover-progress: 1;
     }
 }
 

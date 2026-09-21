@@ -1,7 +1,7 @@
 import { deepMerge } from '@/utils/objects/deepMerge';
 import { fixedTimeStep } from '@/utils/timing/fixedTimeStep';
-import type * as planck from 'planck';
-import { CanvasRendererOptions, RenderableBody, RenderableFixture, RenderableImage, RenderableJoint, RenderableShape, RenderableWorld, RendererBounds, RenderOptions } from './CanvasRenderer.types';
+import type { BodyType, PhysicsBody, PhysicsShape, PhysicsWorld, Vector } from '../engine/index.ts';
+import type { CanvasRendererOptions, RenderableImage, RendererBounds, RenderOptions } from './CanvasRenderer.types.ts';
 
 const defaultOptions: CanvasRendererOptions = {
     bgColor: 'transparent',
@@ -11,6 +11,7 @@ const defaultOptions: CanvasRendererOptions = {
     quality: 1,
     zoom: 1,
     offset: { x: 0, y: 0 },
+    debug: false,
     default: {
         lineWidth: 2,
         strokeStyle: 'transparent',
@@ -18,9 +19,18 @@ const defaultOptions: CanvasRendererOptions = {
     }
 };
 
-const getCorrectQuality = (dpr: number = window.devicePixelRatio) => {
-    return dpr < 1 ? dpr * (4 / 3) + (2 / 3) : dpr + 1;
+// in css pixels.
+const debugLineWidth = 1.5;
+
+const debugColors: Record<BodyType, { stroke: string; fill: string }> = {
+    static: { stroke: 'rgba(255, 64, 160, 0.95)', fill: 'rgba(255, 64, 160, 0.12)' },
+    kinematic: { stroke: 'rgba(64, 160, 255, 0.95)', fill: 'rgba(64, 160, 255, 0.12)' },
+    dynamic: { stroke: 'rgba(64, 220, 120, 0.95)', fill: 'rgba(64, 220, 120, 0.12)' }
 };
+
+// One canvas pixel per device pixel. Rendering above the screen's resolution only
+// multiplies the pixels to clear, draw and composite every frame.
+const getCorrectQuality = (dpr: number = window.devicePixelRatio) => dpr;
 
 export class CanvasRenderer {
     options: CanvasRendererOptions;
@@ -37,6 +47,7 @@ export class CanvasRenderer {
 
     abortController = new AbortController();
     animation: ReturnType<typeof fixedTimeStep> | null = null;
+    lastSceneState: unknown[] = [];
 
     constructor(canvas: HTMLCanvasElement, options: DeepPartial<CanvasRendererOptions> = {}) {
         this.options = deepMerge(defaultOptions, options);
@@ -138,7 +149,7 @@ export class CanvasRenderer {
         };
     }
 
-    animate(world: planck.World) {
+    animate(world: PhysicsWorld) {
         if (this.animation) {
             this.animation.cancel();
             this.animation = null;
@@ -147,9 +158,9 @@ export class CanvasRenderer {
         const interval = this.options.timeStep * 1000;
         const fps = Math.round(1000 / interval);
         const update = () => world.step(this.options.timeStep);
-        const render = () => this.renderWorld(world as RenderableWorld);
+        const render = () => this.renderWorld(world);
 
-        this.animation = fixedTimeStep(update, render, fps, 'CanvasRenderer');
+        this.animation = fixedTimeStep(update, render, fps, 'physics');
     }
 
     resizeCanvas(width: number, height: number): void {
@@ -165,31 +176,14 @@ export class CanvasRenderer {
         this.canvas.width = window.innerWidth * quality;
         this.canvas.height = window.innerHeight * quality;
 
+        // assigning the canvas size clears it, even when the size did not change.
+        this.lastSceneState = [];
+
         this.computeActualOffset();
     }
 
     clearCanvas() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    }
-
-    getRenderOptionsOf(...objects: any[]): RenderOptions {
-        let result: RenderOptions = {};
-
-        for (const object of objects) {
-            let renderOptions: RenderOptions | undefined = {};
-
-            if ('getUserData' in object) {
-                renderOptions = object.getUserData()?.render;
-            } else if ('m_userData' in object) {
-                // planck.js currently does not have a userData property on shapes.
-                // this is a workaround to access the userData property on shapes.
-                renderOptions = object.m_userData?.render;
-            }
-
-            result = { ...result, ...renderOptions };
-        }
-
-        return result;
     }
 
     setContextOptions(renderOptions: RenderOptions) {
@@ -203,42 +197,6 @@ export class CanvasRenderer {
         ctx.lineJoin = 'round';
     }
 
-    renderBody(body: RenderableBody) {
-        for (let fixture = body.getFixtureList(); fixture; fixture = fixture.getNext()) {
-            this.renderFixture(body, fixture);
-        }
-    }
-
-    renderFixture(body: RenderableBody, fixture: RenderableFixture) {
-        const shape = fixture.getShape();
-
-        this.renderShape(body, fixture, shape);
-    }
-
-    renderShape(body: RenderableBody, fixture: RenderableFixture, shape: RenderableShape) {
-        const renderOptions = this.getRenderOptionsOf(body, fixture, shape);
-
-        const drawShape = () => {
-            const type = shape.getType();
-
-            if (type === 'circle') {
-                this.drawCircleShape(body, shape as planck.CircleShape);
-            } else if (type === 'edge') {
-                this.drawEdgeShape(body, shape as planck.EdgeShape);
-            } else if (type === 'polygon' || type === 'chain') {
-                this.drawPolygonShape(body, shape as planck.PolygonShape | planck.ChainShape);
-            }
-        };
-
-        this.renderObject(renderOptions, drawShape, [body, fixture, shape]);
-    }
-
-    renderJoint(joint: RenderableJoint) {
-        const renderOptions = this.getRenderOptionsOf(joint);
-
-        this.renderObject(renderOptions, () => this.drawJoint(joint), [joint]);
-    }
-
     drawBackground() {
         const { bgColor } = this.options;
 
@@ -250,50 +208,193 @@ export class CanvasRenderer {
         ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
-    renderWorld(world: RenderableWorld) {
+    // Everything that affects the rendered image. When none of it changed since the last frame,
+    // the canvas already shows the right picture and redrawing it would only cost GPU time.
+    collectSceneState(world: PhysicsWorld) {
+        const { actualScale, actualOffset } = this.computedValues;
+        const state: unknown[] = [this.canvas.width, this.canvas.height, actualScale, actualOffset.x, actualOffset.y, this.options.debug];
+
+        for (const body of world.bodies) {
+            const render = body.userData.render;
+
+            state.push(body.position.x, body.position.y, body.angle, body.shapes.size, render?.hidden, render?.image);
+        }
+
+        return state;
+    }
+
+    hasSceneChanged(world: PhysicsWorld) {
+        const state = this.collectSceneState(world);
+        const previousState = this.lastSceneState;
+
+        this.lastSceneState = state;
+
+        if (state.length !== previousState.length) return true;
+
+        return state.some((value, index) => value !== previousState[index]);
+    }
+
+    renderWorld(world: PhysicsWorld) {
+        const { ctx } = this;
+        const { actualScale, actualOffset } = this.computedValues;
+
+        if (!this.hasSceneChanged(world)) return;
+
         this.clearCanvas();
         this.drawBackground();
 
-        for (let body = world.getBodyList(); body; body = body.getNext()) {
+        ctx.save();
+        ctx.translate(actualOffset.x, actualOffset.y);
+        ctx.scale(actualScale, actualScale);
+
+        for (const body of world.bodies) {
             this.renderBody(body);
         }
 
-        for (let joint = world.getJointList(); joint; joint = joint.getNext()) {
-            this.renderJoint(joint);
-        }
+        ctx.restore();
     }
 
-    renderObject(renderOptions: RenderOptions, draw: () => void, dataArray?: any[]) {
-        if (renderOptions.hidden) return;
+    renderBody(body: PhysicsBody) {
+        const bodyOptions = body.userData.render ?? {};
+        const { debug } = this.options;
+
+        if (bodyOptions.hidden && !debug) return;
 
         const ctx = this.ctx;
-        const callbacks = renderOptions.callbacks;
-        const { beforeTransforms, afterTransforms, beforeDraw, afterDraw } = callbacks || {};
-        const { actualScale, actualOffset } = this.computedValues;
 
         ctx.save();
+        ctx.translate(body.position.x, body.position.y);
+        ctx.rotate(body.angle);
 
-        beforeTransforms?.(this, renderOptions, dataArray);
+        if (!bodyOptions.hidden) {
+            for (const shape of body.shapes) {
+                this.renderShape(shape, bodyOptions);
+            }
 
-        ctx.translate(actualOffset.x, actualOffset.y);
+            // The body image is drawn once per body, not once per shape.
+            if (bodyOptions.image) this.drawImage(bodyOptions.image);
+        }
 
-        ctx.scale(actualScale, actualScale);
+        if (debug) this.drawDebugGeometry(body);
 
-        afterTransforms?.(this, renderOptions, dataArray);
+        ctx.restore();
+    }
+
+    drawDebugGeometry(body: PhysicsBody) {
+        const ctx = this.ctx;
+        const { pixelsPerMeter, zoom } = this.options;
+        const colors = debugColors[body.type];
+
+        ctx.lineWidth = debugLineWidth / (pixelsPerMeter * zoom);
+        ctx.lineJoin = 'round';
+        ctx.strokeStyle = colors.stroke;
+        ctx.fillStyle = colors.fill;
+
+        for (const shape of body.shapes) {
+            if (shape.geometry.type === 'circle') {
+                this.drawDebugCircle(shape.geometry.center, shape.geometry.radius);
+                continue;
+            }
+
+            for (const polygon of shape.polygons) {
+                this.drawDebugPolygon(polygon);
+            }
+        }
+
+        this.drawDebugOrigin(ctx.lineWidth * 4);
+    }
+
+    drawDebugPolygon(vertices: Vector[]) {
+        const ctx = this.ctx;
+
+        ctx.beginPath();
+
+        for (const { x, y } of vertices) {
+            ctx.lineTo(x, y);
+        }
+
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+    }
+
+    // The radius line makes the rotation of circles visible.
+    drawDebugCircle(center: Vector, radius: number) {
+        const ctx = this.ctx;
+
+        ctx.beginPath();
+        ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.moveTo(center.x, center.y);
+        ctx.lineTo(center.x + radius, center.y);
+        ctx.stroke();
+    }
+
+    drawDebugOrigin(size: number) {
+        const ctx = this.ctx;
+
+        ctx.beginPath();
+        ctx.moveTo(-size, 0);
+        ctx.lineTo(size, 0);
+        ctx.moveTo(0, -size);
+        ctx.lineTo(0, size);
+        ctx.stroke();
+    }
+
+    renderShape(shape: PhysicsShape, bodyOptions: RenderOptions) {
+        const shapeOptions = shape.userData.render ?? {};
+        const renderOptions = { ...bodyOptions, ...shapeOptions };
+
+        if (renderOptions.hidden) return;
 
         this.setContextOptions(renderOptions);
 
-        beforeDraw?.(this, renderOptions, dataArray);
+        const shouldFill = this.isVisibleStyle(this.ctx.fillStyle);
+        const shouldStroke = this.isVisibleStyle(this.ctx.strokeStyle);
 
-        draw();
+        if (shouldFill || shouldStroke) {
+            this.traceShapePath(shape);
 
-        const image = renderOptions.image;
+            if (shouldFill) this.ctx.fill();
+            if (shouldStroke) this.ctx.stroke();
+        }
 
-        if (image) this.drawImage(image);
+        if (shapeOptions.image) this.drawImage(shapeOptions.image);
+    }
 
-        afterDraw?.(this, renderOptions, dataArray);
+    isVisibleStyle(style: string | CanvasGradient | CanvasPattern) {
+        if (typeof style !== 'string') return true;
 
-        ctx.restore();
+        const isTransparent = style === 'transparent' || style === 'rgba(0, 0, 0, 0)';
+
+        return !isTransparent;
+    }
+
+    traceShapePath(shape: PhysicsShape) {
+        const ctx = this.ctx;
+        const { geometry } = shape;
+
+        ctx.beginPath();
+
+        if (geometry.type === 'circle') {
+            ctx.arc(geometry.center.x, geometry.center.y, geometry.radius, 0, 2 * Math.PI);
+            return;
+        }
+
+        const { vertices } = geometry;
+
+        for (let i = 0; i < vertices.length; i++) {
+            const { x, y } = vertices[i];
+
+            if (i === 0) {
+                ctx.moveTo(x, y);
+                continue;
+            }
+
+            ctx.lineTo(x, y);
+        }
+
+        if (vertices.length > 2) ctx.closePath();
     }
 
     drawImage(image: RenderableImage) {
@@ -314,83 +415,5 @@ export class CanvasRenderer {
         ctx.drawImage(element, - w / 2, - h / 2, w, h);
 
         ctx.restore();
-    }
-
-    drawCircleShape(body: RenderableBody, shape: planck.CircleShape): void {
-        const ctx = this.ctx;
-        const radius = shape.m_radius;
-        const pos = body.getPosition();
-        const angle = body.getAngle();
-
-        ctx.beginPath();
-        ctx.translate(pos.x, pos.y);
-        ctx.rotate(angle);
-        ctx.arc(0, 0, radius, 0, 2 * Math.PI);
-        ctx.fill();
-        ctx.stroke();
-        ctx.closePath();
-    }
-
-    drawLine(x1: number, y1: number, x2: number, y2: number) {
-        const ctx = this.ctx;
-
-        ctx.beginPath();
-        ctx.translate(x1, y1);
-        ctx.moveTo(0, 0);
-        ctx.lineTo(x2 - x1, y2 - y1);
-        ctx.stroke();
-        ctx.closePath();
-    }
-
-    drawEdgeShape(_body: RenderableBody, shape: planck.EdgeShape): void {
-        const a = shape.m_vertex1;
-        const b = shape.m_vertex2;
-        this.drawLine(a.x, a.y, b.x, b.y);
-    }
-
-    drawJoint(joint: planck.Joint): void {
-        const a = joint.getAnchorA();
-        const b = joint.getAnchorB();
-        this.drawLine(a.x, a.y, b.x, b.y);
-    }
-
-    drawPolygonShape(body: RenderableBody, shape: planck.PolygonShape | planck.ChainShape): void {
-        const ctx = this.ctx;
-        const vertices = shape.m_vertices;
-
-        if (!vertices.length) return;
-
-        let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-
-        for (const { x, y } of vertices) {
-            minX = Math.min(minX, x);
-            maxX = Math.max(maxX, x);
-            minY = Math.min(minY, y);
-            maxY = Math.max(maxY, y);
-        }
-
-        const pos = body.getPosition();
-        const angle = body.getAngle();
-
-        ctx.beginPath();
-        ctx.translate(pos.x, pos.y);
-        ctx.rotate(angle);
-
-        for (let i = 0; i < vertices.length; i++) {
-            const { x, y } = vertices[i];
-
-            if (!i) {
-                ctx.moveTo(x, y);
-                continue;
-            }
-
-            ctx.lineTo(x, y);
-        }
-
-        if (vertices.length > 2) ctx.closePath();
-
-        ctx.fill();
-        ctx.stroke();
-        ctx.closePath();
     }
 }

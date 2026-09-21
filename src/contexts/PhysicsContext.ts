@@ -1,28 +1,27 @@
-import { CanvasRenderer } from '@/components/physics';
-import planck from 'planck';
+import type { CanvasRenderer } from '@/components/physics/utils/CanvasRenderer.ts';
+import type { PhysicsBody, PhysicsShape, PhysicsUserData, PhysicsWorld, ShapeGeometry } from '@/components/physics/engine/index.ts';
 import { createContext } from 'react';
 
-export type World = planck.World & {
-    bullet?: boolean;
+export type ShapeDescriptor = {
+    geometry: ShapeGeometry;
+    userData?: PhysicsUserData;
 };
 
 export const RendererContext = createContext({} as {
     renderer: CanvasRenderer | null,
-    world: World | null,
-    setWorld: (world: World | null) => void
+    world: PhysicsWorld | null,
+    setWorld: (world: PhysicsWorld | null) => void
 });
 
 export const WorldContext = createContext({} as {
-    world: World
+    world: PhysicsWorld
 });
 
 export const BodyContext = createContext({} as {
-    body: planck.Body | null
+    body: PhysicsBody | null
 });
 
 export const FixtureContext = createContext({} as {
-    fixture: planck.Fixture | null,
-    shape: planck.Shape | null,
-    setFixture: (fixture: planck.Fixture) => void,
-    setShape: (shape: planck.Shape) => void
+    shape: PhysicsShape | null,
+    setShape: (shape: ShapeDescriptor) => void
 });

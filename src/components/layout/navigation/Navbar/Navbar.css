@@ -32,7 +32,7 @@
         justify-content: center;
         align-items: center;
         flex-shrink: 0;
-        transition-property: transform, opacity;
+        transition-property: transform, opacity, --hover-progress;
         transition-duration: var(--fast-duration);
         transition-timing-function: var(--easing);
 
@@ -44,7 +44,7 @@
 
         &:hover,
         &.active {
-            color: var(--main-color);
+            --hover-progress: 1;
         }
     }
 
@@ -122,7 +122,7 @@
         right: 0;
         transform: translateX(calc(100% + var(--app-side-padding)));
         opacity: 0;
-        transition-property: transform, opacity;
+        transition-property: transform, opacity, --hover-progress;
         transition-duration: var(--fast-duration);
         transition-timing-function: var(--easing);
     }

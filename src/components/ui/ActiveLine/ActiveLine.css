@@ -15,7 +15,6 @@
         content: '';
         position: absolute;
         background-color: var(--main-color);
-        transition: background-color var(--fast-duration) var(--easing);
     }
 
     &.top,

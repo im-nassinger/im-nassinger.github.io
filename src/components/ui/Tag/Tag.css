@@ -5,7 +5,6 @@
     &:before,
     &:after {
         color: var(--main-color);
-        transition: color var(--fast-duration) var(--easing);
     }
 
     &:before {

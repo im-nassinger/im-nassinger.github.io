@@ -1,0 +1,54 @@
+/* Global experiment switches. The profiler overlay adds these classes to <html>
+   to turn expensive effects off and compare the frame rate with and without them. */
+html.profiler-no-backdrop-filter *,
+html.profiler-no-backdrop-filter *::before,
+html.profiler-no-backdrop-filter *::after {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+html.profiler-no-css-filters *:not(.profiler-overlay) {
+    filter: none !important;
+}
+
+html.profiler-hide-canvases canvas {
+    display: none !important;
+}
+
+html.profiler-no-transitions *,
+html.profiler-no-transitions *::before,
+html.profiler-no-transitions *::after {
+    transition: none !important;
+    animation: none !important;
+}
+
+html.profiler-hide-physics-canvas #physics-canvas {
+    display: none !important;
+}
+
+html.profiler-hide-background-canvas #background-canvas {
+    display: none !important;
+}
+
+/* important declarations override animations, so this holds --hue still while the animation keeps running. */
+html.profiler-freeze-hue body {
+    --hue: 180 !important;
+}
+
+/* only transitions, keeping animations (and so the hue) running. */
+html.profiler-no-transitions-only *,
+html.profiler-no-transitions-only *::before,
+html.profiler-no-transitions-only *::after {
+    transition: none !important;
+}
+
+/* backgrounds and texts keep a fixed tint while the accent color (--main-color) keeps cycling. */
+html.profiler-fixed-bg-fg body {
+    --fixed-tint: hsl(200, 60%, 52%);
+    --bg-1: color-mix(in srgb, var(--bg-1-rgb), var(--fixed-tint) 1.75%);
+    --bg-2: color-mix(in srgb, var(--bg-2-rgb), var(--fixed-tint) 1.75%);
+    --bg-3: color-mix(in srgb, var(--bg-3-rgb), var(--fixed-tint) 1.75%);
+    --fg-1: color-mix(in srgb, var(--fg-1-rgb), var(--fixed-tint) 7.5%);
+    --fg-2: color-mix(in srgb, var(--fg-2-rgb), var(--fixed-tint) 7.5%);
+    --fg-3: color-mix(in srgb, var(--fg-3-rgb), var(--fixed-tint) 7.5%);
+}

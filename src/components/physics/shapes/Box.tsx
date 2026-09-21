@@ -1,9 +1,8 @@
-import { FixtureContext } from '@/contexts/PhysicsContext';
-import { useObjectRef } from '@/hooks/useObjectRef';
-import { PlanckRef } from '@/hooks/usePlanckRef';
-import * as planck from 'planck';
+import { FixtureContext } from '@/contexts/PhysicsContext.ts';
+import { useObjectRef } from '@/hooks/useObjectRef.ts';
 import { memo, useContext, useEffect } from 'react';
-import { RenderableShapeDef } from '../utils/CanvasRenderer.types';
+import { makeBoxVertices } from '../engine/index.ts';
+import type { PhysicsUserData, Vector } from '../engine/index.ts';
 
 type WidthOptions =
     | { width: number; halfWidth?: number }
@@ -15,13 +14,13 @@ type HeightOptions =
 
 // at least one of: (center), (position), (x, y).
 type PositionOptions =
-    | { center: planck.Vec2Value; position?: never; x?: never; y?: never }
-    | { center?: never; position: planck.Vec2Value; x?: never; y?: never }
+    | { center: Vector; position?: never; x?: never; y?: never }
+    | { center?: never; position: Vector; x?: never; y?: never }
     | { center?: never; position?: never; x?: number; y?: number };
 
-type BoxProps = Partial<RenderableShapeDef> & {
+type BoxProps = {
     angle?: number;
-    ref?: PlanckRef<planck.BoxShape | null>;
+    userData?: PhysicsUserData;
 } & WidthOptions & HeightOptions & PositionOptions;
 
 export const Box = memo((props: BoxProps) => {
@@ -35,22 +34,16 @@ export const Box = memo((props: BoxProps) => {
     const stableProps = useObjectRef(props);
 
     useEffect(() => {
-        const halfWidth = stableProps.width ? stableProps.width / 2 : stableProps.halfWidth! * 2;
-        const halfHeight = stableProps.height ? stableProps.height / 2 : stableProps.halfHeight! * 2;
-        const position = stableProps.center ?? stableProps.position ?? new planck.Vec2(stableProps.x ?? 0, stableProps.y ?? 0);
+        const halfWidth = stableProps.width ? stableProps.width / 2 : stableProps.halfWidth!;
+        const halfHeight = stableProps.height ? stableProps.height / 2 : stableProps.halfHeight!;
+        const center = stableProps.center ?? stableProps.position ?? { x: stableProps.x ?? 0, y: stableProps.y ?? 0 };
 
-        const planckBox = new planck.Box(halfWidth, halfHeight, position, stableProps.angle);
+        const vertices = makeBoxVertices(halfWidth, halfHeight, center, stableProps.angle);
 
-        if (stableProps.userData) {
-            Object.assign(planckBox, {
-                // only box2d v3 supports userData in shapes.
-                m_userData: stableProps.userData
-            });
-        }
-
-        setShape(planckBox);
-
-        if (stableProps.ref) stableProps.ref.current = planckBox;
+        setShape({
+            geometry: { type: 'polygon', vertices },
+            userData: stableProps.userData
+        });
     }, [setShape, stableProps]);
 
     return null;

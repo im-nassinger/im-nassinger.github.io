@@ -20,8 +20,10 @@ import { memo } from 'react';
 
 // here I'm exporting the src of each image as a string.
 export { default as Nassinger } from './bitmap/nassinger.png';
+export { default as IxcSoft } from './bitmap/ixc.png';
 export { default as Unoesc } from './bitmap/unoesc.png';
 export { default as Domestika } from './bitmap/domestika.png';
+export { default as Cebrac } from './bitmap/cebrac.png';
 
 export { default as Hashtag } from './svg/hashtag.svg';
 export { default as Sparkles } from './svg/sparkles.svg';

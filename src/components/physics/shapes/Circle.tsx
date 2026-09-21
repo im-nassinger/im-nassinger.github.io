@@ -1,17 +1,15 @@
-import { FixtureContext } from '@/contexts/PhysicsContext';
-import { useObjectRef } from '@/hooks/useObjectRef';
-import { PlanckRef } from '@/hooks/usePlanckRef';
-import * as planck from 'planck';
+import { FixtureContext } from '@/contexts/PhysicsContext.ts';
+import { useObjectRef } from '@/hooks/useObjectRef.ts';
 import { memo, useContext, useEffect } from 'react';
-import { RenderableShapeDef } from '../utils/CanvasRenderer.types';
+import type { PhysicsUserData, Vector } from '../engine/index.ts';
 
-type CircleProps = Partial<RenderableShapeDef> & {
+type CircleProps = {
     x?: number;
     y?: number;
-    position?: planck.Vec2Value;
+    position?: Vector;
     radius?: number;
-    ref?: PlanckRef<planck.CircleShape | null>;
-}
+    userData?: PhysicsUserData;
+};
 
 export const Circle = memo((props: CircleProps) => {
     const fixtureCtx = useContext(FixtureContext);
@@ -24,20 +22,13 @@ export const Circle = memo((props: CircleProps) => {
     const stableProps = useObjectRef(props);
 
     useEffect(() => {
-        const position = stableProps.position ?? new planck.Vec2(stableProps.x ?? 0, stableProps.y ?? 0);
+        const center = stableProps.position ?? { x: stableProps.x ?? 0, y: stableProps.y ?? 0 };
+        const radius = stableProps.radius ?? 1;
 
-        const planckCircle = new planck.Circle(position, stableProps.radius);
-
-        if (stableProps.userData) {
-            Object.assign(planckCircle, {
-                // only box2d v3 supports userData in shapes.
-                m_userData: stableProps.userData
-            });
-        }
-
-        setShape(planckCircle);
-
-        if (stableProps.ref) stableProps.ref.current = planckCircle;
+        setShape({
+            geometry: { type: 'circle', center, radius },
+            userData: stableProps.userData
+        });
     }, [setShape, stableProps]);
 
     return null;

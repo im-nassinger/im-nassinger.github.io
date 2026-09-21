@@ -92,3 +92,40 @@ body {
 .node {
     color: var(--color-node) !important;
 }
+/* The hue cycles through the color wheel as a css animation instead of being set from JS, so no
+   script has to write to the DOM for it. Its steps still start transitions on properties computed
+   from it, so nothing should transition a hue-derived color (see --hover-progress below). */
+@property --hue {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 180;
+}
+
+/* Hover and active states animate this number from 0 to 1 instead of animating colors, and the
+   colors are mixed from it. A transition on a color restarts on every hue step, because the color
+   itself changes; a transition on this number only runs when the state really changes. */
+@property --hover-progress {
+    syntax: '<number>';
+    inherits: false;
+    initial-value: 0;
+}
+
+@keyframes hue-cycle {
+    from {
+        --hue: 0;
+    }
+
+    to {
+        --hue: 360;
+    }
+}
+
+body {
+    /* one degree per step, so the page restyles 10 times per second instead of every frame. */
+    /* started at a random hue and paused while the user scrolls, see bodyVariables.ts. */
+    animation: hue-cycle 36s steps(360) infinite;
+
+    @media (max-width: 500px) {
+        animation-timing-function: steps(144);
+    }
+}

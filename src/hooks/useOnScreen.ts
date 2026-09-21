@@ -1,5 +1,6 @@
 import { SmoothScrollContext } from '@/contexts/SmoothScrollContext';
 import { useContext, useEffect, useRef } from 'react';
+import { profile } from '@/utils/profiler/profiler.ts';
 
 export type UseOnScreenOptions = {
     threshold?: number | number[];
@@ -73,12 +74,14 @@ export default function useOnScreen<
 
         handleScroll();
 
-        container.addEventListener('scroll', handleScroll, { passive: true });
+        const profiledHandleScroll = () => profile('scroll:use-on-screen', handleScroll);
+
+        container.addEventListener('scroll', profiledHandleScroll, { passive: true });
         window.addEventListener('resize', handleScroll);
 
         return () => {
             observer.disconnect();
-            container.removeEventListener('scroll', handleScroll);
+            container.removeEventListener('scroll', profiledHandleScroll);
             window.removeEventListener('resize', handleScroll);
         };
     }, [container, options.threshold]);

@@ -1,0 +1,127 @@
+.profiler-overlay {
+    position: fixed;
+    left: 0.8rem;
+    bottom: 0.8rem;
+    z-index: 2147483647;
+    width: 46rem;
+    max-height: calc(100dvh - 1.6rem);
+    overflow: auto;
+    padding: 1rem 1.2rem;
+    border-radius: 0.6rem;
+    background: rgba(12, 12, 14, 0.94);
+    color: #e6e6e6;
+    font: 1.15rem/1.45 ui-monospace, 'Cascadia Mono', Consolas, monospace;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+    user-select: text;
+
+    &.minimized {
+        width: auto;
+
+        .body {
+            display: none;
+        }
+    }
+
+    .header {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+    }
+
+    .fps {
+        font-size: 1.6rem;
+        font-weight: 700;
+    }
+
+    .good {
+        color: #5fd38d;
+    }
+
+    .warn {
+        color: #f0c050;
+    }
+
+    .bad {
+        color: #ff6b6b;
+    }
+
+    .muted {
+        color: #8a8a8a;
+    }
+
+    .spacer {
+        flex: 1;
+    }
+
+    button {
+        padding: 0.2rem 0.7rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 0.4rem;
+        background: rgba(255, 255, 255, 0.06);
+        color: inherit;
+        font: inherit;
+        cursor: pointer;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.14);
+        }
+    }
+
+    h4 {
+        margin: 1rem 0 0.3rem;
+        font-size: 1.1rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #9ab;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 0.1rem 0.4rem;
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    th:first-child, td:first-child {
+        text-align: left;
+        white-space: normal;
+        word-break: break-all;
+    }
+
+    th {
+        font-weight: 400;
+        color: #8a8a8a;
+    }
+
+    .bar {
+        display: inline-block;
+        height: 0.6rem;
+        margin-right: 0.4rem;
+        border-radius: 0.2rem;
+        background: #5fa8ff;
+        vertical-align: middle;
+    }
+
+    .toggles {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.2rem 1rem;
+
+        label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+    }
+
+    .hint {
+        margin-top: 0.6rem;
+        color: #8a8a8a;
+    }
+}

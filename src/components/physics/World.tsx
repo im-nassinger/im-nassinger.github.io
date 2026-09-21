@@ -1,43 +1,54 @@
-import { RendererContext, World as PlanckWorld, WorldContext } from '@/contexts/PhysicsContext';
-import { useObjectRef } from '@/hooks/useObjectRef';
-import { PlanckRef } from '@/hooks/usePlanckRef';
-import * as planck from 'planck';
-import { memo, ReactNode, useContext, useEffect, useState } from 'react';
+import { RendererContext, WorldContext } from '@/contexts/PhysicsContext.ts';
+import { useObjectRef } from '@/hooks/useObjectRef.ts';
+import type { PhysicsRef } from '@/hooks/usePhysicsRef.ts';
+import { memo, useContext, useEffect, useState } from 'react';
+import type { ReactNode } from 'react';
+import { PhysicsWorld } from './engine/index.ts';
+import type { Vector, WorldOptions } from './engine/index.ts';
 
-type WorldProps = Omit<Partial<planck.WorldDef>, 'gravity'> & {
-    gravity?: planck.Vec2Value | number;
-    bullet?: boolean;
+type WorldProps = Omit<WorldOptions, 'gravity'> & {
+    gravity?: Vector | number;
     children: ReactNode;
-    ref?: PlanckRef<planck.World | null>;
-}
+    ref?: PhysicsRef<PhysicsWorld | null>;
+};
 
 export const World = memo((props: WorldProps) => {
     const rendererCtx = useContext(RendererContext);
     const stableProps = useObjectRef(props);
 
     const setRendererWorld = rendererCtx?.setWorld;
-    const [ world, setWorld ] = useState<planck.World | null>(null);
+    const [ world, setWorld ] = useState<PhysicsWorld | null>(null);
 
     useEffect(() => {
-        let { gravity, bullet } = stableProps;
+        const { gravity, children: _children, ref: _ref, ...worldOptions } = stableProps;
+        const gravityVector = typeof gravity === 'number' ? { x: 0, y: gravity } : gravity;
 
-        if (typeof gravity === 'number') {
-            gravity = new planck.Vec2(0, gravity);
-        }
+        let cancelled = false;
+        let createdWorld: PhysicsWorld | null = null;
 
-        const worldDef = { ...stableProps, gravity };
-        const planckWorld: PlanckWorld = new planck.World(worldDef);
+        PhysicsWorld.create({ ...worldOptions, gravity: gravityVector }).then((physicsWorld) => {
+            if (cancelled) {
+                physicsWorld.destroy();
+                return;
+            }
 
-        planckWorld.bullet = bullet ?? false;
+            createdWorld = physicsWorld;
 
-        setWorld(planckWorld);
-        setRendererWorld(planckWorld);
+            setWorld(physicsWorld);
+            setRendererWorld(physicsWorld);
 
-        if (stableProps.ref) stableProps.ref.current = planckWorld;
+            if (stableProps.ref) stableProps.ref.current = physicsWorld;
+        }).catch((error) => {
+            console.error('Failed to load the physics engine.', error);
+        });
 
         return () => {
+            cancelled = true;
+
             setWorld(null);
             setRendererWorld(null);
+
+            createdWorld?.destroy();
         };
     }, [setRendererWorld, stableProps]);
 

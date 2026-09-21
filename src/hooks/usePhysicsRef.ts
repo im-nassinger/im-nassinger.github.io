@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react';
 
-export type PlanckRef<T> = {
+export type PhysicsRef<T> = {
     get current(): T;
     set current(value: T);
 };
 
-export const usePlanckRef = <T = any>(initialValue: T): PlanckRef<T> => {
+export const usePhysicsRef = <T = any>(initialValue: T): PhysicsRef<T> => {
     const [ ref, setRef ] = useState<T>(initialValue);
 
     const result = useMemo(() => {

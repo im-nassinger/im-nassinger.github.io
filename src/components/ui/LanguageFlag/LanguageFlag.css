@@ -8,7 +8,6 @@
         flex-shrink: 0;
         width: 2.4rem;
         height: 2.4rem;
-        transition: color var(--fast-duration) var(--easing);
     }
 
     .flag-icon {

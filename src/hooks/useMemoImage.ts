@@ -114,8 +114,9 @@ export const useMemoImage = (
 
         let { width = 1, height = 1, attributes } = stableOptions;
 
-        width = width * pixelsPerMeter * window.devicePixelRatio * quality;
-        height = height * pixelsPerMeter * window.devicePixelRatio * quality;
+        // the quality already is the canvas' device pixel ratio, so this bakes the image at the exact size it is drawn.
+        width = width * pixelsPerMeter * quality;
+        height = height * pixelsPerMeter * quality;
 
         const bitmapCacheKey = getKey(originalImage.src, width, height, attributes);
         const cachedBitmap = bitmapCache.get(bitmapCacheKey);

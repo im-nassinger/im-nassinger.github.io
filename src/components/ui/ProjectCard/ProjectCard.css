@@ -16,9 +16,9 @@
         gap: 1rem;
         padding: 3rem;
         border-radius: calc(var(--border-radius) - var(--border-width));
-        background-color: var(--bg-2);
+        background-color: color-mix(in srgb, var(--bg-2), transparent calc(var(--hover-progress) * (1% + var(--opacity-mult) * 2.5%)));
         z-index: 2;
-        transition: background-color var(--fast-duration) var(--easing);
+        transition: --hover-progress var(--fast-duration) var(--easing);
         overflow: hidden;
 
         .title {
@@ -87,7 +87,7 @@
         cursor: pointer;
 
         .content {
-            background-color: color-mix(in srgb, var(--bg-2), transparent calc(1% + var(--opacity-mult) * 2.5%));
+            --hover-progress: 1;
         }
     }
 }

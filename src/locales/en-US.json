@@ -72,17 +72,27 @@
     },
     "extras": {
         "title": "Extras",
-        "description": "Here is some additional information about me.",
+        "description": "Here is some additional information about me, such as my education, professional experience, and certifications.",
         "items": {
+            "ixc-soft": {
+                "title": "Developer at IXC Soft",
+                "subtitle": "Full-time software development (2025 - present)",
+                "description": "I have been working full-time as a developer at [IXC Soft](https://ixcsoft.com/) since late 2025, mainly developing internal systems and tools, as well as firmware for home automation devices. Day to day, I collaborate with the team to build new solutions, maintain existing ones, and continuously improve the quality of our products."
+            },
             "unoesc": {
                 "title": "Information Systems",
                 "subtitle": "Designing, developing, testing, and maintaining systems (2025)",
                 "description": "I am currently studying Information Systems at [Unoesc](https://www.unoesc.edu.br/campus/chapeco/), where I am further enhancing my software development skills. The course covers various areas, including systems analysis, databases, networks, and information security. I am learning to design, develop, test, and maintain software systems efficiently and effectively."
             },
             "creative-coding": {
-                "title": "Creative Coding",
+                "title": "Creative Coding Course",
                 "subtitle": "Using code as a form of creative expression (2023)",
                 "description": "I took courses in [creative coding](https://www.youtube.com/watch?v=EoL5R_0h9xk), where I learned to use code as a tool to create visuals, graphics, and interactive experiences. I know how to develop generative visual pieces, exploring motion, interactivity, and real-time changes. I enjoy working with code in an experimental way, blending logic and creativity to build visual compositions."
+            },
+            "cebrac": {
+                "title": "Geração Web Course",
+                "subtitle": "Computing, design, and website creation (2018)",
+                "description": "I took the Geração Web course at [Cebrac](https://www.cebrac.com.br/escolas/chapeco/) in Chapecó, where I had my first contact with building websites using HTML and CSS. The course also covered image editing, cloud office tools, and the professional use of social media. It was one of my first steps into the world of web development."
             }
         }
     },

@@ -7,6 +7,7 @@ import { debounce } from '@/utils/timing/debounce';
 import { useContext, useEffect } from 'react';
 import projectList from './project-list.json' with { type: 'json' };
 import './Projects.css';
+import { profile } from '@/utils/profiler/profiler.ts';
 
 export function ProjectsInfo() {
     return (
@@ -58,6 +59,26 @@ export function ProjectsSectionContent() {
     )
 }
 
+type BlobCard = {
+    card: HTMLElement;
+    blob: HTMLElement;
+    fakeBlob: HTMLElement;
+    radiusPx: number;
+};
+
+function findBlobCards() {
+    const blobCards: BlobCard[] = [];
+
+    for (const card of document.querySelectorAll<HTMLElement>('.project-card')) {
+        const blob = card.querySelector<HTMLElement>('.blob');
+        const fakeBlob = card.querySelector<HTMLElement>('.fakeblob');
+
+        if (blob && fakeBlob) blobCards.push({ card, blob, fakeBlob, radiusPx: NaN });
+    }
+
+    return blobCards;
+}
+
 export function Projects() {
     const scrollCtx = useContext(SmoothScrollContext);
 
@@ -66,69 +87,82 @@ export function Projects() {
     }
 
     useEffect(() => {
-        const cardElements = document.querySelectorAll<HTMLElement>('.project-card')!;
         const ctrl = new AbortController();
         const { signal } = ctrl;
+
+        const blobCards = findBlobCards();
 
         const resetBlob = (blob: HTMLElement) => blob.removeAttribute('style');
 
         const resetBlobs = () => {
-            for (const element of cardElements) {
-                const blob = element.querySelector<HTMLElement>('.blob')!;
+            for (const { blob } of blobCards) resetBlob(blob);
+        };
 
-                if (blob) resetBlob(element);
+        // computed styles are read once (and again on resize), never while scrolling.
+        const measureBlobRadii = () => {
+            const rootFontSize = getRootFontSize();
+
+            for (const blobCard of blobCards) {
+                const blobSize = parseFloat(getCssVar('--size', blobCard.blob));
+                blobCard.radiusPx = (blobSize / 2) * rootFontSize;
             }
         };
 
         resetBlobs();
+        measureBlobRadii();
+
+        window.addEventListener('resize', measureBlobRadii, { signal });
 
         let lastMouseX = -1, lastMouseY = -1;
 
+        // every layout read happens before any style write, so the browser lays out at most once.
         const updateBlobs = () => {
             if (lastMouseX === -1 || lastMouseY === -1) return;
 
-            for (const element of cardElements) {
-                const blob = element.querySelector<HTMLElement>('.blob')!;
-                const fakeBlob = element.querySelector<HTMLElement>('.fakeblob')!;
+            const updates = blobCards.map((blobCard) => ({
+                blobCard,
+                cardRect: blobCard.card.getBoundingClientRect(),
+                fakeBlobRect: blobCard.fakeBlob.getBoundingClientRect()
+            }));
 
-                if (!blob || !fakeBlob) continue;
+            for (const { blobCard, cardRect, fakeBlobRect } of updates) {
+                const { blob, radiusPx } = blobCard;
 
-                const elementRect = element.getBoundingClientRect();
-                const blobRect = fakeBlob.getBoundingClientRect();
-
-                const updateBlobPosition = () => {
-                    const x = Math.round((lastMouseX - blobRect.left) - (blobRect.width / 2));
-                    const y = Math.round((lastMouseY - blobRect.top) - (blobRect.height / 2));
-
-                    blob.style.transform = `translate(${x}px, ${y}px)`;
+                const expandedRect = {
+                    x: cardRect.left - radiusPx,
+                    y: cardRect.top - radiusPx,
+                    width: cardRect.width + radiusPx * 2,
+                    height: cardRect.height + radiusPx * 2,
                 };
 
-                const blobRadius = parseFloat(getCssVar('--size', blob)) / 2;
+                const hasRadius = !isNaN(radiusPx);
+                const isInside = !hasRadius || pointInRect(lastMouseX, lastMouseY, expandedRect);
 
-                if (isNaN(blobRadius)) {
-                    updateBlobPosition();
+                if (!isInside) {
+                    resetBlob(blob);
                     continue;
                 }
 
-                const rootFontSize = getRootFontSize();
-                const actualRadius = blobRadius * rootFontSize;
+                const x = Math.round((lastMouseX - fakeBlobRect.left) - (fakeBlobRect.width / 2));
+                const y = Math.round((lastMouseY - fakeBlobRect.top) - (fakeBlobRect.height / 2));
 
-                const expandedRect = {
-                    x: elementRect.left - actualRadius,
-                    y: elementRect.top - actualRadius,
-                    width: elementRect.width + actualRadius * 2,
-                    height: elementRect.height + actualRadius * 2,
-                };
-
-                const isInside = pointInRect(lastMouseX, lastMouseY, expandedRect);
-
-                if (isInside) {
-                    updateBlobPosition();
-                } else {
-                    resetBlob(blob);
-                }
+                blob.style.transform = `translate(${x}px, ${y}px)`;
             }
         };
+
+        // scroll and mousemove fire several times per frame, but the blobs only need to move once per frame.
+        let pendingFrame = 0;
+
+        const scheduleBlobUpdate = () => {
+            if (pendingFrame) return;
+
+            pendingFrame = requestAnimationFrame(() => {
+                pendingFrame = 0;
+                profile('projects:update-blobs', updateBlobs);
+            });
+        };
+
+        signal.addEventListener('abort', () => cancelAnimationFrame(pendingFrame));
 
         let isTouching = false;
 
@@ -154,14 +188,14 @@ export function Projects() {
             lastMouseX = event.clientX;
             lastMouseY = event.clientY;
 
-            updateBlobs();
+            scheduleBlobUpdate();
         }, { signal });
 
         const container = scrollCtx.container
 
         if (!container) return;
 
-        container.addEventListener('scroll', () => updateBlobs(), { signal });
+        container.addEventListener('scroll', scheduleBlobUpdate, { signal });
 
         return () => {
             ctrl.abort();

@@ -3,6 +3,7 @@
 // note: this only works well on chromium based browsers (because of performance issues on other browsers).
 
 import { themeState } from '@/stores/themeState';
+import { getHue } from '@/utils/dom/bodyVariables';
 import { getCssVar } from '@/utils/dom/getCssVar';
 import { fixedTimeStep } from '@/utils/timing/fixedTimeStep';
 
@@ -57,27 +58,30 @@ function hslToRgb(h: number, s: number, l: number): RGBAColor {
 }
 
 function parseHslString(hslString: string): HSLColor {
-    const match = hslString.match(/hsl\((\d+), (\d+)%, (\d+)%\)/);
+    // --hue is an animated <number>, so the hue may come with decimals.
+    const match = hslString.match(/hsl\(\s*([\d.]+),\s*([\d.]+)%,\s*([\d.]+)%\s*\)/);
     if (!match) throw new Error('Invalid HSL string');
 
-    const h = parseInt(match[1]);
-    const s = parseInt(match[2]);
-    const l = parseInt(match[3]);
+    const h = parseFloat(match[1]);
+    const s = parseFloat(match[2]);
+    const l = parseFloat(match[3]);
 
     return { h, s, l };
 }
 
-function getMainColor(hslOffset?: HSLColor) {
-    const mainColor = getCssVar('--main-color', document.body);
-    const hslColor = parseHslString(mainColor);
+// Reads --main-color once. Only its hue changes over time, and that one comes from getHue().
+function readBaseMainColor() {
+    return parseHslString(getCssVar('--main-color', document.body));
+}
+
+function getMainColor(baseColor: HSLColor, hue: number, hslOffset?: HSLColor) {
     const rgbColor = hslToRgb(
-        (hslColor.h + (hslOffset?.h ?? 0)) / 360,
-        (hslColor.s + (hslOffset?.s ?? 0)) / 100,
-        (hslColor.l + (hslOffset?.l ?? 0)) / 100
+        (hue + (hslOffset?.h ?? 0)) / 360,
+        (baseColor.s + (hslOffset?.s ?? 0)) / 100,
+        (baseColor.l + (hslOffset?.l ?? 0)) / 100
     );
 
     return {
-        hslColor,
         rgbColor,
         toString: () => getColorString(rgbColor)
     };
@@ -166,6 +170,8 @@ export class BackgroundEffectRenderer {
     animation: ReturnType<typeof fixedTimeStep> | null = null;
     circles: Circle[] = [];
     targetFps = 30;
+    baseMainColor = readBaseMainColor();
+    lastColorKey = '';
 
     sparkles = {
         image: new Image(),
@@ -211,7 +217,7 @@ export class BackgroundEffectRenderer {
         const render = () => this.draw();
         const fps = this.targetFps;
 
-        this.animation = fixedTimeStep(update, render, fps, 'BackgroundEffectRenderer');
+        this.animation = fixedTimeStep(update, render, fps, 'background-effect');
     }
 
     clear() {
@@ -226,7 +232,7 @@ export class BackgroundEffectRenderer {
     }
 
     getCircleColor(index: number): RGBAColor {
-        const { rgbColor } = getMainColor({
+        const { rgbColor } = getMainColor(this.baseMainColor, getHue(), {
             h: (index - 1) * 15,
             s: index * 10,
             l: index * 2.5
@@ -283,8 +289,19 @@ export class BackgroundEffectRenderer {
             circle.targetY = Math.random() * this.canvas.height;
             circle.targetRadius = this.getRandomRadius();
         }
+    }
 
-        circle.color = this.getCircleColor(circle.index);
+    // Colors only change with the hue or the theme, so they are not recomputed every update.
+    updateCircleColors() {
+        const colorKey = `${getHue()}-${themeState.theme}`;
+
+        if (colorKey === this.lastColorKey) return;
+
+        this.lastColorKey = colorKey;
+
+        for (const circle of this.circles) {
+            circle.color = this.getCircleColor(circle.index);
+        }
     }
 
     drawCircle(circle: Circle) {
@@ -322,6 +339,8 @@ export class BackgroundEffectRenderer {
         for (const circle of this.circles) {
             this.updateCircle(circle);
         }
+
+        this.updateCircleColors();
     }
 
     draw() {
