@@ -16,6 +16,14 @@ export type RenderOptions = Partial<{
     image: RenderableImage;
 }>;
 
+// Custom drawing on top of the bodies, for things that are not physics bodies.
+export type CanvasOverlay = {
+    // called with the context already in world coordinates (meters).
+    draw: (ctx: CanvasRenderingContext2D) => void;
+    // everything that affects the overlay's image. The canvas is only redrawn when something changed.
+    getSceneState: () => unknown[];
+};
+
 export type CanvasRendererOptions = {
     bgColor: string;
     timeStep: number;

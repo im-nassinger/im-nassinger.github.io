@@ -1,7 +1,7 @@
 import { deepMerge } from '@/utils/objects/deepMerge';
 import { fixedTimeStep } from '@/utils/timing/fixedTimeStep';
 import type { BodyType, PhysicsBody, PhysicsShape, PhysicsWorld, Vector } from '../engine/index.ts';
-import type { CanvasRendererOptions, RenderableImage, RendererBounds, RenderOptions } from './CanvasRenderer.types.ts';
+import type { CanvasOverlay, CanvasRendererOptions, RenderableImage, RendererBounds, RenderOptions } from './CanvasRenderer.types.ts';
 
 const defaultOptions: CanvasRendererOptions = {
     bgColor: 'transparent',
@@ -48,6 +48,7 @@ export class CanvasRenderer {
     abortController = new AbortController();
     animation: ReturnType<typeof fixedTimeStep> | null = null;
     lastSceneState: unknown[] = [];
+    readonly overlays = new Set<CanvasOverlay>();
 
     constructor(canvas: HTMLCanvasElement, options: DeepPartial<CanvasRendererOptions> = {}) {
         this.options = deepMerge(defaultOptions, options);
@@ -109,6 +110,16 @@ export class CanvasRenderer {
         if (offset.y !== undefined) this.options.offset.y = offset.y;
 
         this.computeActualOffset();
+    }
+
+    addOverlay(overlay: CanvasOverlay) {
+        this.overlays.add(overlay);
+        this.lastSceneState = [];
+
+        return () => {
+            this.overlays.delete(overlay);
+            this.lastSceneState = [];
+        };
     }
 
     fitToElement(element: HTMLElement) {
@@ -220,6 +231,10 @@ export class CanvasRenderer {
             state.push(body.position.x, body.position.y, body.angle, body.shapes.size, render?.hidden, render?.image);
         }
 
+        for (const overlay of this.overlays) {
+            state.push(...overlay.getSceneState());
+        }
+
         return state;
     }
 
@@ -249,6 +264,12 @@ export class CanvasRenderer {
 
         for (const body of world.bodies) {
             this.renderBody(body);
+        }
+
+        for (const overlay of this.overlays) {
+            ctx.save();
+            overlay.draw(ctx);
+            ctx.restore();
         }
 
         ctx.restore();

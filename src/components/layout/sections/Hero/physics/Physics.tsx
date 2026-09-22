@@ -26,6 +26,7 @@ import {
     VSCodeLogo
 } from './logos';
 import { getRackWidthFor, Rack } from './Rack';
+import { Slingshot } from './Slingshot';
 import { Walls } from './Walls';
 
 // the rack fills from the bottom row up, so the first logos end up at the base of the triangle.
@@ -88,6 +89,16 @@ const computeRackX = () => {
     return rightX - paddingInMeters - rackWidth / 2;
 };
 
+// the world origin follows the rack, so the left edge of the content moves with it.
+const computeContentLeftX = (rackX: number) => {
+    const { itemSidePadding, appSidePadding } = getBodyPaddingVariables();
+    const paddingInMeters = (appSidePadding + itemSidePadding) / pixelsPerMeter;
+
+    const leftX = -window.innerWidth / pixelsPerMeter / 2;
+
+    return leftX + paddingInMeters - rackX;
+};
+
 export const Physics = memo(() => {
     const physicsWorldRef = usePhysicsRef<PhysicsWorld | null>(null);
     const rendererRef = usePhysicsRef<CanvasRenderer | null>(null);
@@ -140,6 +151,8 @@ export const Physics = memo(() => {
                     </Rack>
 
                     <Walls offsetX={rackX} offsetY={0} />
+
+                    <Slingshot contentLeftX={computeContentLeftX(rackX)} />
                 </World>
             </Renderer>
         </>

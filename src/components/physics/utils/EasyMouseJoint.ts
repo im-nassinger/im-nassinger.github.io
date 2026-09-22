@@ -111,7 +111,10 @@ export class EasyMouseJoint {
         this.onHoverBody(body);
     }
 
-    onHoverBody(_body: PhysicsBody) {
+    // hovering a body that is already moving (like a thrown bird) does not wake the others up.
+    onHoverBody(hoveredBody: PhysicsBody) {
+        if (hoveredBody.type !== 'static') return;
+
         for (const body of this.world.bodies) {
             if (!this.getBodyName(body)) continue;
 

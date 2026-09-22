@@ -25,6 +25,10 @@ export type PhysicsShape = {
     polygons: Vector[][];
 };
 
+// box2d's default mask (B2_DEFAULT_MASK_BITS): collides with every category.
+const collideWithEverythingMask = '18446744073709551615';
+const collideWithNothingMask = '0';
+
 export class PhysicsBody {
     readonly box2d: Box2D;
     readonly id: BodyId;
@@ -35,6 +39,7 @@ export class PhysicsBody {
     angle = 0;
     // box2d units per meter, see PhysicsWorld.
     readonly lengthScale: number;
+    isCollisionEnabled = true;
     private destroyed = false;
 
     constructor(box2d: Box2D, id: BodyId, type: BodyType, userData: PhysicsUserData, lengthScale: number) {
@@ -94,6 +99,76 @@ export class PhysicsBody {
         b2Body_SetLinearVelocity(this.id, box2DVelocity);
 
         box2DVelocity.delete();
+    }
+
+    getLinearVelocity() {
+        const box2DVelocity = this.box2d.b2Body_GetLinearVelocity(this.id);
+        const velocity = scaleVector(box2DVelocity, 1 / this.lengthScale);
+
+        box2DVelocity.delete();
+
+        return velocity;
+    }
+
+    // Teleports the body. Meant for kinematic bodies that follow a scripted path.
+    setTransform(position: Vector, angle: number) {
+        if (this.destroyed) return;
+
+        const { b2Vec2, b2MakeRot, b2Body_SetTransform } = this.box2d;
+        const scaledPosition = scaleVector(position, this.lengthScale);
+        const box2DPosition = new b2Vec2(scaledPosition.x, scaledPosition.y);
+        const rotation = b2MakeRot(angle);
+
+        b2Body_SetTransform(this.id, box2DPosition, rotation);
+
+        box2DPosition.delete();
+        rotation.delete();
+
+        this.position = { ...position };
+        this.angle = angle;
+    }
+
+    // A body without collision still moves and falls, but passes through everything.
+    setCollisionEnabled(enabled: boolean) {
+        if (this.destroyed || this.isCollisionEnabled === enabled) return;
+
+        const { b2Shape_GetFilter, b2Shape_SetFilter } = this.box2d;
+        const maskBits = enabled ? collideWithEverythingMask : collideWithNothingMask;
+
+        for (const shape of this.shapes) {
+            for (const shapeId of shape.shapeIds) {
+                const filter = b2Shape_GetFilter(shapeId);
+
+                filter.setMaskBits64(maskBits);
+                b2Shape_SetFilter(shapeId, filter);
+                filter.delete();
+            }
+        }
+
+        this.isCollisionEnabled = enabled;
+    }
+
+    // distance from a world point to the closest shape of the body, 0 when the point is inside it.
+    getDistanceTo(point: Vector) {
+        const { b2Vec2, b2Shape_GetClosestPoint } = this.box2d;
+
+        const scaledPoint = scaleVector(point, this.lengthScale);
+        const target = new b2Vec2(scaledPoint.x, scaledPoint.y);
+        let closestDistance = Infinity;
+
+        for (const shape of this.shapes) {
+            for (const shapeId of shape.shapeIds) {
+                const closestPoint = b2Shape_GetClosestPoint(shapeId, target);
+                const distance = Math.hypot(closestPoint.x - scaledPoint.x, closestPoint.y - scaledPoint.y);
+
+                closestPoint.delete();
+                closestDistance = Math.min(closestDistance, distance / this.lengthScale);
+            }
+        }
+
+        target.delete();
+
+        return closestDistance;
     }
 
     getMass() {

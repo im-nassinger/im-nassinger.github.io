@@ -169,6 +169,21 @@ export class PhysicsWorld {
         return jointId;
     }
 
+    // Stops two bodies from colliding with each other, until the joint is destroyed.
+    createFilterJoint(bodyA: PhysicsBody, bodyB: PhysicsBody) {
+        const { b2DefaultFilterJointDef, b2CreateFilterJoint } = this.box2d;
+        const jointDef = b2DefaultFilterJointDef();
+
+        jointDef.base.bodyIdA = bodyA.id;
+        jointDef.base.bodyIdB = bodyB.id;
+
+        const jointId = b2CreateFilterJoint(this.id, jointDef);
+
+        jointDef.delete();
+
+        return jointId;
+    }
+
     destroyJoint(jointId: JointId) {
         if (this.destroyed) return;
         if (!this.box2d.b2Joint_IsValid(jointId)) return;

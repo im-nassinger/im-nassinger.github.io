@@ -139,6 +139,15 @@
     }
 }
 
+body.slingshot-hover {
+    cursor: grab;
+}
+
+body.slingshot-dragging {
+    cursor: grabbing;
+    user-select: none;
+}
+
 @media (max-width: 400px) {
     .hero {
         .buttons {
