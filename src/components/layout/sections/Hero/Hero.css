@@ -24,6 +24,12 @@
         height: 100%;
         z-index: 1;
         pointer-events: none;
+        opacity: 0;
+        transition: opacity var(--slow-duration) var(--easing);
+
+        &[data-ready] {
+            opacity: 1;
+        }
     }
 
     .left-container {

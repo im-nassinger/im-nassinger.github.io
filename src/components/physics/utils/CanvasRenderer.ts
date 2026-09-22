@@ -12,6 +12,7 @@ const defaultOptions: CanvasRendererOptions = {
     zoom: 1,
     offset: { x: 0, y: 0 },
     debug: false,
+    waitForImages: false,
     default: {
         lineWidth: 2,
         strokeStyle: 'transparent',
@@ -48,6 +49,7 @@ export class CanvasRenderer {
     abortController = new AbortController();
     animation: ReturnType<typeof fixedTimeStep> | null = null;
     lastSceneState: unknown[] = [];
+    isSceneRevealed = false;
     readonly overlays = new Set<CanvasOverlay>();
 
     constructor(canvas: HTMLCanvasElement, options: DeepPartial<CanvasRendererOptions> = {}) {
@@ -55,6 +57,8 @@ export class CanvasRenderer {
         this.parent = canvas.parentElement || document.body;
         this.canvas = canvas;
         this.ctx = this.canvas.getContext('2d')!;
+
+        this.canvas.removeAttribute('data-ready');
 
         this.onResize();
 
@@ -249,10 +253,37 @@ export class CanvasRenderer {
         return state.some((value, index) => value !== previousState[index]);
     }
 
+    // the images of the bodies are loaded and baked asynchronously, one by one.
+    areImagesReady(world: PhysicsWorld) {
+        let hasImages = false;
+
+        for (const body of world.bodies) {
+            const image = body.userData.render?.image;
+            if (!image) continue;
+
+            if (!image.element) return false;
+
+            hasImages = true;
+        }
+
+        return hasImages;
+    }
+
+    isSceneReady(world: PhysicsWorld) {
+        if (this.isSceneRevealed) return true;
+        if (this.options.waitForImages && !this.areImagesReady(world)) return false;
+
+        this.isSceneRevealed = true;
+        this.canvas.setAttribute('data-ready', '');
+
+        return true;
+    }
+
     renderWorld(world: PhysicsWorld) {
         const { ctx } = this;
         const { actualScale, actualOffset } = this.computedValues;
 
+        if (!this.isSceneReady(world)) return;
         if (!this.hasSceneChanged(world)) return;
 
         this.clearCanvas();

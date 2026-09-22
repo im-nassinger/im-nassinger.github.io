@@ -142,6 +142,7 @@ export const Physics = memo(() => {
             <Renderer
                 pixelsPerMeter={pixelsPerMeter}
                 debug={debugPhysics}
+                waitForImages={true}
                 ref={rendererRef}
                 default={{ strokeStyle: 'transparent', lineWidth: 4 }}
             >

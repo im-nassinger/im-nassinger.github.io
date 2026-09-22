@@ -34,6 +34,8 @@ export type CanvasRendererOptions = {
     offset: { x: number; y: number };
     // draws the collision geometry of every body on top of the regular rendering.
     debug: boolean;
+    // keeps the canvas empty until every body image is loaded, so the scene shows up all at once.
+    waitForImages: boolean;
     default: {
         lineWidth: number;
         strokeStyle: string;

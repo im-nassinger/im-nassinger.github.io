@@ -40,7 +40,7 @@ export class SlingshotController {
         this.removeStepListener = world.addStepListener((timeStep) => this.update(timeStep));
 
         this.removeOverlay = renderer.addOverlay({
-            draw: (ctx) => this.slingshotRenderer.draw(ctx, this.scene),
+            draw: (ctx) => this.draw(ctx),
             getSceneState: () => this.getSceneState()
         });
 
@@ -99,6 +99,13 @@ export class SlingshotController {
         for (const bird of this.birds) bird.destroy();
 
         document.body.classList.remove('slingshot-hover', 'slingshot-dragging');
+    }
+
+    // the band starts at the world origin, so nothing is drawn until the slingshot is placed.
+    private draw(ctx: CanvasRenderingContext2D) {
+        if (!this.hasPlacement) return;
+
+        this.slingshotRenderer.draw(ctx, this.scene);
     }
 
     // called by the world before every box2d step.
@@ -250,6 +257,7 @@ export class SlingshotController {
         const birdStates = this.birds.flatMap((bird) => [bird.body.position.x, bird.body.position.y, bird.body.angle, bird.sprite]);
 
         return [
+            this.hasPlacement,
             this.spriteVersion,
             band.restPosition.x, band.restPosition.y, band.bandPosition.x, band.bandPosition.y, band.bandAngle, band.state,
             ...birdStates
