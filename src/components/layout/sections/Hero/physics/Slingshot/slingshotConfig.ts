@@ -1,6 +1,6 @@
 import type { Vector } from '@/components/physics';
 import { pixelsPerMeter, worldGravity } from '../config';
-import { slingshotArt } from './slingshotArt';
+import { birdArt, slingshotArt } from './slingshotArt';
 
 // The slingshot is a port of Angry Birds Classic (data/scripts/Slingshot.lua). The game measures
 // everything in its own meters, 20 sprite pixels each. These constants convert them to this world.
@@ -35,6 +35,19 @@ export const slingshotConfig = {
     springDamping: 50,
     springStepFactor: 0.05 / 20,
     springReferenceTimeStep: 1 / 60,
+    // rubberBandStretchabilityFactor: the band barely moves at these angles, so the bird cannot be shot
+    // straight up (dragging it down into the trunk) or into the floor (dragging it up over the forks).
+    // The angle is the direction from the band towards the rest point: -PI/2 is dragging straight down,
+    // +PI/2 is dragging straight up, and going away from those is dragging towards the right.
+    shortStretch: {
+        factor: 0.25,
+        // how wide the fade back to the full stretch is, at both ends of every range.
+        fadeAngle: 0.15,
+        ranges: [
+            { fromAngle: -2.12, toAngle: -1.5 },
+            { fromAngle: 0.7, toAngle: 2.6 }
+        ]
+    },
     // setRubberBandForSittingBird
     sittingOffset: { x: -0.1 * gameMeter, y: -0.1 * gameMeter },
     sittingAngle: Math.atan2(-0.1, 0.1),
@@ -60,8 +73,9 @@ export const slingshotConfig = {
 };
 
 export const birdConfig = {
-    // blocks.lua RedBird. The density is higher than the game's so the bird can move the logos.
-    radius: 0.85 * gameMeter,
+    // matches the body circle of the drawing. The game's 0.85 meters is smaller than its own sprite.
+    // The density is higher than the game's (blocks.lua RedBird) so the bird can move the logos.
+    radius: spritePixelsToMeters(birdArt.bodyRadius),
     density: 30,
     friction: 0.3,
     restitution: 0.43,

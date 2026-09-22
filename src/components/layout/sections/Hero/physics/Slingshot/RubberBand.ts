@@ -1,20 +1,23 @@
 import type { Vector } from '@/components/physics';
 import { clamp } from '@/utils/math/clamp';
+import { lerp } from '@/utils/math/lerp';
 import { slingshotConfig } from './slingshotConfig';
 import { addVectors, distanceBetween, multiplyVector, normalizeVector, subtractVectors, vectorLength } from './vector';
 
 export type RubberBandState = 'empty' | 'sitting' | 'dragging' | 'wobbling';
 
-// The game makes pulling straight down (into the trunk) much shorter. `angle` is the direction from the
-// band towards the rest point, so pulling down gives about -PI/2. Port of rubberBandStretchabilityFactor.
+// How much of the full stretch is allowed at this angle, 1 being all of it. Inside the shortStretch
+// range the band barely moves, and it fades back to the full stretch over the angles next to it.
 function getStretchability(angle: number) {
-    let factor = 1;
+    const { factor, fadeAngle, ranges } = slingshotConfig.shortStretch;
 
-    if (angle >= -1.9 && angle < -1.75) factor = -(angle + 1.75) / 0.15;
-    if (angle >= -1.75 && angle < -1.5) factor = 0.25;
-    if (angle >= -1.5 && angle < -1.35) factor = (angle + 1.5) / 0.15;
+    const fades = ranges.map(({ fromAngle, toAngle }) => {
+        const angleOutsideRange = Math.max(fromAngle - angle, angle - toAngle, 0);
 
-    return Math.max(factor, 0.25);
+        return clamp(angleOutsideRange / fadeAngle, 0, 1);
+    });
+
+    return lerp(factor, 1, Math.min(...fades));
 }
 
 // Port of SlingshotSystem from the game's Slingshot.lua, in world meters.

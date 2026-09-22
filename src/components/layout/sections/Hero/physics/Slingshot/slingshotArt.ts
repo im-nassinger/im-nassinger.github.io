@@ -64,6 +64,7 @@ function measureBird(viewBox: { width: number; height: number }, body: Box): Art
 
 // the body boxes of the smaller drawings are offset by the translate() of their root group.
 export const birdArt = {
+    bodyRadius: birdBodyWidth / 2,
     neutral: measureBird({ width: 1814.72, height: 1758.44 }, { x: 242.2, y: 255.3, width: 1572.5, height: 1503.1 }),
     blink: measureBird({ width: 158.18, height: 151.84 }, { x: 181.8 - 160.73, y: 126.1 - 104.08, width: 137.1, height: 129.8 }),
     flying: measureBird({ width: 160.71, height: 138.82 }, { x: 181.1 - 159.64, y: 130.7 - 110.59, width: 139.3, height: 118.7 })

@@ -303,14 +303,20 @@ export class CanvasRenderer {
             ctx.restore();
         }
 
+        // after the overlays, so the geometry of bodies drawn by an overlay is not hidden under them.
+        if (this.options.debug) {
+            for (const body of world.bodies) {
+                this.renderBodyDebugGeometry(body);
+            }
+        }
+
         ctx.restore();
     }
 
     renderBody(body: PhysicsBody) {
         const bodyOptions = body.userData.render ?? {};
-        const { debug } = this.options;
 
-        if (bodyOptions.hidden && !debug) return;
+        if (bodyOptions.hidden) return;
 
         const ctx = this.ctx;
 
@@ -318,16 +324,24 @@ export class CanvasRenderer {
         ctx.translate(body.position.x, body.position.y);
         ctx.rotate(body.angle);
 
-        if (!bodyOptions.hidden) {
-            for (const shape of body.shapes) {
-                this.renderShape(shape, bodyOptions);
-            }
-
-            // The body image is drawn once per body, not once per shape.
-            if (bodyOptions.image) this.drawImage(bodyOptions.image);
+        for (const shape of body.shapes) {
+            this.renderShape(shape, bodyOptions);
         }
 
-        if (debug) this.drawDebugGeometry(body);
+        // The body image is drawn once per body, not once per shape.
+        if (bodyOptions.image) this.drawImage(bodyOptions.image);
+
+        ctx.restore();
+    }
+
+    renderBodyDebugGeometry(body: PhysicsBody) {
+        const ctx = this.ctx;
+
+        ctx.save();
+        ctx.translate(body.position.x, body.position.y);
+        ctx.rotate(body.angle);
+
+        this.drawDebugGeometry(body);
 
         ctx.restore();
     }
