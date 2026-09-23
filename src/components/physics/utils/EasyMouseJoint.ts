@@ -29,6 +29,8 @@ export class EasyMouseJoint {
     abortController?: AbortController;
     hoveringBody: PhysicsBody | null = null;
     removeStepListener: (() => void) | null = null;
+    // the mouse button or the finger that started the drag, so the other ones do not disturb it.
+    private dragPointerId: number | null = null;
 
     constructor(world: PhysicsWorld, options: EasyMouseJointOptions) {
         this.world = world;
@@ -65,6 +67,8 @@ export class EasyMouseJoint {
         const body = this.getBodyAt(position);
         if (!body) return;
 
+        // a touch does not hover over the body before pressing it, so grabbing one wakes them up.
+        this.onHoverBody(body);
         this.setHoveringBody(body);
 
         const { maxForce = 5000, hertz = 5, dampingRatio = 0.7 } = this.options;
@@ -135,6 +139,11 @@ export class EasyMouseJoint {
         this.setHoveringBody(null);
     }
 
+    private endDrag() {
+        this.dragPointerId = null;
+        this.onMouseUp();
+    }
+
     setupEvents() {
         this.removeEvents();
 
@@ -148,35 +157,59 @@ export class EasyMouseJoint {
             renderer.getWorldPosition(event.clientX, event.clientY)
         );
 
+        // while a body is being dragged, the other pointers are left alone.
+        const isFromDragPointer = (event: PointerEvent) => (
+            this.dragPointerId === null || this.dragPointerId === event.pointerId
+        );
+
         document.addEventListener('pointerdown', (event) => {
             if (event.button !== 0) return;
-            (event.target as Element).setPointerCapture(event.pointerId);
+            if (this.drag) return;
+
             this.onMouseDown({ position: getEventPosition(event) });
+
+            if (!this.drag) return;
+
+            this.dragPointerId = event.pointerId;
+
+            if (event.target instanceof Element) event.target.setPointerCapture(event.pointerId);
         }, { signal });
 
         document.addEventListener('pointermove', (event) => {
+            if (!isFromDragPointer(event)) return;
+
             profile('physics:pointer-move', () => this.onMouseMove({ position: getEventPosition(event) }));
         }, { signal });
 
-        document.addEventListener('pointerup', () => {
-            this.onMouseUp();
+        document.addEventListener('pointerup', (event) => {
+            if (!isFromDragPointer(event)) return;
+
+            this.endDrag();
         }, { signal });
 
-        document.addEventListener('pointercancel', () => {
-            this.onMouseUp();
+        document.addEventListener('pointercancel', (event) => {
+            if (!isFromDragPointer(event)) return;
+
+            this.endDrag();
         }, { signal });
+
+        // the page would scroll under the finger that is dragging a body. pointerdown always comes
+        // before touchstart, so the drag is already known here and only that touch is taken over.
+        document.addEventListener('touchstart', (event) => {
+            if (this.drag) event.preventDefault();
+        }, { signal, passive: false });
 
         window.addEventListener('blur', () => {
-            this.onMouseUp();
+            this.endDrag();
         }, { signal });
 
         document.addEventListener('visibilitychange', () => {
-            if (document.hidden) this.onMouseUp();
+            if (document.hidden) this.endDrag();
         }, { signal });
     }
 
     removeEvents() {
-        this.onMouseUp();
+        this.endDrag();
         this.abortController?.abort();
     }
 };

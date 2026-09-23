@@ -32,6 +32,11 @@ export class SlingshotController {
     private isPointerInRevealArea = false;
     private hideDelayLeft = 0;
 
+    // a touch screen has no pointer hovering around to raise the slingshot, so it stays up.
+    private readonly staysRevealed = !window.matchMedia('(hover: hover)').matches;
+    // the finger or mouse button that grabbed the bird, so the other ones do not release it.
+    private dragPointerId: number | null = null;
+
     constructor(world: PhysicsWorld, renderer: CanvasRenderer, sprites: SlingshotSprites) {
         this.world = world;
         this.renderer = renderer;
@@ -128,7 +133,7 @@ export class SlingshotController {
 
     // rises while the pointer is around (or dragging), and hides again a moment after it leaves.
     private updateReveal(timeStep: number) {
-        const wantsToBeVisible = this.isPointerInRevealArea || this.band.isDragging;
+        const wantsToBeVisible = this.staysRevealed || this.isPointerInRevealArea || this.band.isDragging;
 
         this.hideDelayLeft = wantsToBeVisible ? revealConfig.hideDelay : this.hideDelayLeft - timeStep;
 
@@ -225,6 +230,11 @@ export class SlingshotController {
         document.body.classList.add('slingshot-dragging');
     }
 
+    private stopDrag() {
+        this.dragPointerId = null;
+        this.release();
+    }
+
     private release() {
         if (!this.band.isDragging) return;
 
@@ -267,19 +277,29 @@ export class SlingshotController {
     private setupPointerEvents() {
         const { signal } = this.abortController;
         const getWorldPosition = (event: PointerEvent) => this.renderer.getWorldPosition(event.clientX, event.clientY);
+        const isFromDragPointer = (event: PointerEvent) => this.dragPointerId === event.pointerId;
 
         document.addEventListener('pointerdown', (event) => {
             if (event.button !== 0) return;
+            if (this.band.isDragging) return;
 
             const point = getWorldPosition(event);
+
+            // a touch cannot hover over the slingshot to raise it, so pressing around it does that.
+            if (event.pointerType !== 'mouse') this.isPointerInRevealArea = this.isInRevealArea(point);
+
             if (!this.isNearLoadedBird(point)) return;
 
             // stops the browser from starting a text selection under the bird.
             event.preventDefault();
+
+            this.dragPointerId = event.pointerId;
             this.startDrag(point);
         }, { signal });
 
         document.addEventListener('pointermove', (event) => {
+            if (this.band.isDragging && !isFromDragPointer(event)) return;
+
             const point = getWorldPosition(event);
 
             this.isPointerInRevealArea = this.isInRevealArea(point);
@@ -289,6 +309,8 @@ export class SlingshotController {
                 return;
             }
 
+            if (event.pointerType !== 'mouse') return;
+
             document.body.classList.toggle('slingshot-hover', this.isNearLoadedBird(point));
         }, { signal });
 
@@ -297,8 +319,20 @@ export class SlingshotController {
             this.isPointerInRevealArea = false;
         }, { signal });
 
-        document.addEventListener('pointerup', () => this.release(), { signal });
-        document.addEventListener('pointercancel', () => this.release(), { signal });
-        window.addEventListener('blur', () => this.release(), { signal });
+        // the page would scroll under the finger that is pulling the bird. pointerdown always comes
+        // before touchstart, so the drag is already known here and only that touch is taken over.
+        document.addEventListener('touchstart', (event) => {
+            if (this.band.isDragging) event.preventDefault();
+        }, { signal, passive: false });
+
+        const endDrag = (event: PointerEvent) => {
+            if (this.band.isDragging && !isFromDragPointer(event)) return;
+
+            this.stopDrag();
+        };
+
+        document.addEventListener('pointerup', endDrag, { signal });
+        document.addEventListener('pointercancel', endDrag, { signal });
+        window.addEventListener('blur', () => this.stopDrag(), { signal });
     }
 }
