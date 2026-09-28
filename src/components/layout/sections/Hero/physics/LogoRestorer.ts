@@ -59,6 +59,14 @@ export class LogoRestorer {
         if (this.idleTime >= logoRestoreConfig.idleTime) this.startRestore();
     }
 
+    // restores right away, without waiting for the scene to go idle.
+    restoreFallenLogos() {
+        if (this.isRestoring) return;
+        if (this.getFallenLogos().length === 0) return;
+
+        this.startRestore();
+    }
+
     private getFallenLogos() {
         return this.options.getLogos().filter((logo) => logo.type !== 'static');
     }

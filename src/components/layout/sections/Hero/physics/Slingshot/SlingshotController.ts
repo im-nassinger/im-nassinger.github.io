@@ -33,6 +33,7 @@ export class SlingshotController {
     // 0 is hidden below the floor, 1 is fully up.
     private revealProgress = 0;
     private isPointerInRevealArea = false;
+    private hasPointerVisitedRevealArea = false;
     private hideDelayLeft = 0;
 
     // a touch screen has no pointer hovering around to raise the slingshot, so it stays up.
@@ -255,6 +256,17 @@ export class SlingshotController {
         return isInsideHorizontally && isLowEnough;
     }
 
+    // The first time the pointer comes to the slingshot, the logos knocked down before (by dragging
+    // them around) go back to the rack, so there is something to shoot at.
+    private setPointerInRevealArea(isInside: boolean) {
+        this.isPointerInRevealArea = isInside;
+
+        if (!isInside || !this.hasPlacement || this.hasPointerVisitedRevealArea) return;
+
+        this.hasPointerVisitedRevealArea = true;
+        this.logoRestorer.restoreFallenLogos();
+    }
+
     private isNearLoadedBird(point: Vector) {
         const bird = this.currentBird;
         if (!bird || bird.state !== 'loaded' || !this.isFullyRevealed) return false;
@@ -327,7 +339,7 @@ export class SlingshotController {
             const point = getWorldPosition(event);
 
             // a touch cannot hover over the slingshot to raise it, so pressing around it does that.
-            if (event.pointerType !== 'mouse') this.isPointerInRevealArea = this.isInRevealArea(point);
+            if (event.pointerType !== 'mouse') this.setPointerInRevealArea(this.isInRevealArea(point));
 
             if (!this.isNearLoadedBird(point)) return;
 
@@ -343,7 +355,7 @@ export class SlingshotController {
 
             const point = getWorldPosition(event);
 
-            this.isPointerInRevealArea = this.isInRevealArea(point);
+            this.setPointerInRevealArea(this.isInRevealArea(point));
 
             if (this.band.isDragging) {
                 this.band.stretchTo(point);
@@ -357,7 +369,7 @@ export class SlingshotController {
 
         // the pointer left the window.
         document.documentElement.addEventListener('pointerleave', () => {
-            this.isPointerInRevealArea = false;
+            this.setPointerInRevealArea(false);
         }, { signal });
 
         // the page would scroll under the finger that is pulling the bird. pointerdown always comes
