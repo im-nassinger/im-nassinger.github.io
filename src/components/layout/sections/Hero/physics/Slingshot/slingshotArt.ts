@@ -34,6 +34,13 @@ export const slingshotArt = {
     restHeightAboveBottom: (816 - slingshotRestPoint.y) * slingshotScale,
     // how far the left fork reaches to the left of the rest point.
     leftExtent: (slingshotRestPoint.x - 152.2) * slingshotScale,
+    // the box around the visible drawing, from the rest point. The svg is empty left of the left fork.
+    drawingBounds: {
+        minX: (152.2 - slingshotRestPoint.x) * slingshotScale,
+        minY: -slingshotRestPoint.y * slingshotScale,
+        maxX: (510 - slingshotRestPoint.x) * slingshotScale,
+        maxY: (816 - slingshotRestPoint.y) * slingshotScale
+    },
     // The drawing has both forks in one piece. The left fork is drawn a second time over the bird,
     // clipped by this outline, which follows the gap between the forks (measured row by row).
     frontForkOutline: [

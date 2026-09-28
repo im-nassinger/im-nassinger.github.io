@@ -46,6 +46,31 @@ export function expandBounds(bounds: Bounds, margin: number): Bounds {
     };
 }
 
+export function offsetBounds(bounds: Bounds, offset: Vector): Bounds {
+    return {
+        minX: bounds.minX + offset.x,
+        minY: bounds.minY + offset.y,
+        maxX: bounds.maxX + offset.x,
+        maxY: bounds.maxY + offset.y
+    };
+}
+
+export function intersectBounds(a: Bounds, b: Bounds): Bounds {
+    return {
+        minX: Math.max(a.minX, b.minX),
+        minY: Math.max(a.minY, b.minY),
+        maxX: Math.min(a.maxX, b.maxX),
+        maxY: Math.min(a.maxY, b.maxY)
+    };
+}
+
+export function boundsContainPoint(bounds: Bounds, point: Vector) {
+    const isInsideHorizontally = point.x >= bounds.minX && point.x <= bounds.maxX;
+    const isInsideVertically = point.y >= bounds.minY && point.y <= bounds.maxY;
+
+    return isInsideHorizontally && isInsideVertically;
+}
+
 export function boundsOverlap(a: Bounds, b: Bounds) {
     return a.minX <= b.maxX && a.maxX >= b.minX && a.minY <= b.maxY && a.maxY >= b.minY;
 }

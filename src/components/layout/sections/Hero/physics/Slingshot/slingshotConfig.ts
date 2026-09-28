@@ -104,8 +104,15 @@ export const revealConfig = {
     hideDelay: 1.2,
     // moves the rest point below the floor, far enough to hide the forks and the loaded bird.
     hiddenOffset: spritePixelsToMeters(slingshotArt.restHeightAboveBottom + 70),
-    // the area around the visible rest point that reveals the slingshot, in world meters.
-    area: { left: 2.5, right: 3.5, above: 3 }
+    // the pointer reveals the slingshot within 100 css pixels of its drawing, in every direction.
+    areaMargin: 100 / pixelsPerMeter,
+    // the box of the slingshot drawing, from the rest point.
+    slingshotBounds: {
+        minX: spritePixelsToMeters(slingshotArt.drawingBounds.minX),
+        minY: spritePixelsToMeters(slingshotArt.drawingBounds.minY),
+        maxX: spritePixelsToMeters(slingshotArt.drawingBounds.maxX),
+        maxY: spritePixelsToMeters(slingshotArt.drawingBounds.maxY)
+    }
 };
 
 // a static logo wakes up (becomes dynamic) when a moving body gets this close to it, in meters,

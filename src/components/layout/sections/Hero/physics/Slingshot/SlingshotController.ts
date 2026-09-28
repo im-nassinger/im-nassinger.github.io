@@ -1,7 +1,8 @@
 import type { CanvasRenderer, PhysicsBody, PhysicsWorld, Vector } from '@/components/physics';
 import { clamp } from '@/utils/math/clamp';
 import { LogoRestorer } from '../LogoRestorer';
-import { boundsOverlap, expandBounds, getBodyBounds } from './bodyBounds';
+import { boundsContainPoint, boundsOverlap, expandBounds, getBodyBounds, intersectBounds, offsetBounds } from './bodyBounds';
+import type { Bounds } from './bodyBounds';
 import { RubberBand } from './RubberBand';
 import { SlingshotBird } from './SlingshotBird';
 import { birdConfig, logoWakeMargin, revealConfig, slingshotConfig } from './slingshotConfig';
@@ -121,6 +122,8 @@ export class SlingshotController {
         if (!this.hasPlacement) return;
 
         this.slingshotRenderer.draw(ctx, this.scene);
+
+        if (this.renderer.options.debug) this.slingshotRenderer.drawRevealArea(ctx, this.getRevealArea());
     }
 
     // called by the world before every box2d step.
@@ -246,14 +249,26 @@ export class SlingshotController {
         }
     }
 
+    // The canvas covers the whole hero, so its box on the screen is the hero's.
+    private getHeroBounds(): Bounds {
+        const hero = this.renderer.canvas.getBoundingClientRect();
+        const topLeft = this.renderer.getWorldPosition(hero.left, hero.top);
+        const bottomRight = this.renderer.getWorldPosition(hero.right, hero.bottom);
+
+        return { minX: topLeft.x, minY: topLeft.y, maxX: bottomRight.x, maxY: bottomRight.y };
+    }
+
+    // the drawn slingshot (where it stands when revealed) with a margin around it, cut to the hero so
+    // the page below it does not count.
+    private getRevealArea() {
+        const slingshotBounds = offsetBounds(revealConfig.slingshotBounds, this.visibleRestPosition);
+        const areaAroundSlingshot = expandBounds(slingshotBounds, revealConfig.areaMargin);
+
+        return intersectBounds(areaAroundSlingshot, this.getHeroBounds());
+    }
+
     private isInRevealArea(point: Vector) {
-        const { left, right, above } = revealConfig.area;
-        const rest = this.visibleRestPosition;
-
-        const isInsideHorizontally = point.x > rest.x - left && point.x < rest.x + right;
-        const isLowEnough = point.y > rest.y - above;
-
-        return isInsideHorizontally && isLowEnough;
+        return boundsContainPoint(this.getRevealArea(), point);
     }
 
     // The first time the pointer comes to the slingshot, the logos knocked down before (by dragging

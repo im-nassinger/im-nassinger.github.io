@@ -1,5 +1,6 @@
 import type { Vector } from '@/components/physics';
-import { worldGravity } from '../config';
+import { pixelsPerMeter, worldGravity } from '../config';
+import type { Bounds } from './bodyBounds';
 import type { RubberBand } from './RubberBand';
 import type { SlingshotBird } from './SlingshotBird';
 import { slingshotArt } from './slingshotArt';
@@ -14,6 +15,10 @@ export type SlingshotScene = {
 };
 
 const metersPerSpritePixel = spritePixelsToMeters(1);
+
+// 1.5 css pixels.
+const revealAreaLineWidth = 1.5 / pixelsPerMeter;
+const revealAreaColor = 'rgba(255, 200, 64, 0.95)';
 
 // Draws in world meters, in the same layers as the game: the slingshot, the back band, the birds, the
 // front band, and the left fork again on top, so the loaded bird looks like it sits between the forks.
@@ -41,6 +46,13 @@ export class SlingshotRenderer {
         if (band.isDragging && band.isStretchedEnoughToShoot) {
             this.drawTrajectory(ctx, band.bandPosition, band.getLaunchVelocity());
         }
+    }
+
+    // outlines the area that reveals the slingshot, for ?physics_debug=true.
+    drawRevealArea(ctx: CanvasRenderingContext2D, area: Bounds) {
+        ctx.lineWidth = revealAreaLineWidth;
+        ctx.strokeStyle = revealAreaColor;
+        ctx.strokeRect(area.minX, area.minY, area.maxX - area.minX, area.maxY - area.minY);
     }
 
     private drawBackLayer(ctx: CanvasRenderingContext2D, band: RubberBand, holderPosition: Vector) {
