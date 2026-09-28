@@ -17,6 +17,13 @@ export const physicsWorldOptions = {
     contactHertz: 60
 };
 
+// once everything knocked down has been asleep for idleTime seconds, the logos glide back to the rack
+// in duration seconds.
+export const logoRestoreConfig = {
+    idleTime: 3,
+    duration: 1.2
+};
+
 const queryParams = new URLSearchParams(window.location.href.split('?')[1]);
 
 // draws the collision polygons of every body over the logos. enabled with ?physics_debug=true

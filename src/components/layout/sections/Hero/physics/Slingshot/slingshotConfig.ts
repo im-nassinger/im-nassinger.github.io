@@ -92,7 +92,9 @@ export const birdConfig = {
     collisionSpeedDrop: 4 * gameMeter * launchSpeedScale,
     collisionFaceTime: 0.5,
     maxFlownBirds: 3,
-    blinkDuration: 0.15
+    blinkDuration: 0.15,
+    // a removed bird fades out over this many seconds
+    fadeOutDuration: 0.4
 };
 
 // The slingshot starts hidden below the floor and rises when the pointer comes close.

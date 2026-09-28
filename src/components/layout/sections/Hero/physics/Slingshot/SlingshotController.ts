@@ -1,5 +1,6 @@
-import type { CanvasRenderer, PhysicsWorld, Vector } from '@/components/physics';
+import type { CanvasRenderer, PhysicsBody, PhysicsWorld, Vector } from '@/components/physics';
 import { clamp } from '@/utils/math/clamp';
+import { LogoRestorer } from '../LogoRestorer';
 import { boundsOverlap, expandBounds, getBodyBounds } from './bodyBounds';
 import { RubberBand } from './RubberBand';
 import { SlingshotBird } from './SlingshotBird';
@@ -18,6 +19,8 @@ export class SlingshotController {
     private readonly slingshotRenderer: SlingshotRenderer;
     private readonly band = new RubberBand();
     private readonly flownBirds: SlingshotBird[] = [];
+    private fadingBirds: SlingshotBird[] = [];
+    private readonly logoRestorer: LogoRestorer;
     private readonly abortController = new AbortController();
     private readonly removeStepListener: () => void;
     private readonly removeOverlay: () => void;
@@ -42,6 +45,12 @@ export class SlingshotController {
         this.renderer = renderer;
         this.slingshotRenderer = new SlingshotRenderer(sprites);
 
+        this.logoRestorer = new LogoRestorer(world, {
+            getLogos: () => this.getLogos(),
+            hasLeftovers: () => this.flownBirds.length > 0,
+            onRestoreStart: () => this.fadeOutFlownBirds()
+        });
+
         this.removeStepListener = world.addStepListener((timeStep) => this.update(timeStep));
 
         this.removeOverlay = renderer.addOverlay({
@@ -55,7 +64,7 @@ export class SlingshotController {
     private get birds() {
         const currentBirds = this.currentBird ? [this.currentBird] : [];
 
-        return [...this.flownBirds, ...currentBirds];
+        return [...this.fadingBirds, ...this.flownBirds, ...currentBirds];
     }
 
     private get scene() {
@@ -123,7 +132,9 @@ export class SlingshotController {
 
         for (const bird of this.flownBirds) bird.updateFlight(timeStep);
 
+        this.updateFadingBirds(timeStep);
         this.wakeUpTouchedLogos(timeStep);
+        this.logoRestorer.update(timeStep);
 
         const lastShotBird = this.flownBirds.at(-1);
         const isReadyForNextBird = !this.currentBird && (!lastShotBird || lastShotBird.isFinished);
@@ -172,6 +183,34 @@ export class SlingshotController {
 
     private spawnNextBird() {
         this.currentBird = new SlingshotBird(this.world, this.waitingPosition, this.band.sittingPosition);
+    }
+
+    private fadeOutBird(bird: SlingshotBird) {
+        bird.startFadeOut();
+        this.fadingBirds.push(bird);
+    }
+
+    private fadeOutFlownBirds() {
+        for (const bird of this.flownBirds.splice(0)) this.fadeOutBird(bird);
+    }
+
+    private updateFadingBirds(timeStep: number) {
+        for (const bird of this.fadingBirds) {
+            bird.updateFlight(timeStep);
+            bird.updateFade(timeStep);
+
+            if (bird.hasFadedOut) bird.destroy();
+        }
+
+        this.fadingBirds = this.fadingBirds.filter((bird) => !bird.hasFadedOut);
+    }
+
+    private isBirdBody(body: PhysicsBody) {
+        return this.birds.some((bird) => bird.body === body);
+    }
+
+    private getLogos() {
+        return [...this.world.bodies].filter((body) => body.userData.name && !this.isBirdBody(body));
     }
 
     // The logos float in their rack as static bodies. A logo only becomes dynamic right before a moving
@@ -258,13 +297,15 @@ export class SlingshotController {
 
     private removeOldBirds() {
         while (this.flownBirds.length > birdConfig.maxFlownBirds) {
-            this.flownBirds.shift()?.destroy();
+            const oldestBird = this.flownBirds.shift();
+
+            if (oldestBird) this.fadeOutBird(oldestBird);
         }
     }
 
     private getSceneState() {
         const { band } = this;
-        const birdStates = this.birds.flatMap((bird) => [bird.body.position.x, bird.body.position.y, bird.body.angle, bird.sprite]);
+        const birdStates = this.birds.flatMap((bird) => [bird.body.position.x, bird.body.position.y, bird.body.angle, bird.sprite, bird.opacity]);
 
         return [
             this.hasPlacement,

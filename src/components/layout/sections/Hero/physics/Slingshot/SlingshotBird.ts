@@ -15,6 +15,7 @@ const randomBlinkDelay = () => 2 + Math.random() * 3;
 export class SlingshotBird {
     readonly body: PhysicsBody;
     state: BirdState = 'hopping';
+    opacity = 1;
 
     private readonly world: PhysicsWorld;
     // bodies the bird was inside when it was launched, each with the filter joint that makes the bird
@@ -165,6 +166,20 @@ export class SlingshotBird {
 
         this.restingTime = speed < birdConfig.restingSpeed ? this.restingTime + timeStep : 0;
         this.previousSpeed = speed;
+    }
+
+    get hasFadedOut() {
+        return this.opacity <= 0;
+    }
+
+    // A removed bird fades away instead of vanishing. It keeps falling and bouncing meanwhile, but
+    // without its name it no longer wakes the logos up and cannot be grabbed.
+    startFadeOut() {
+        delete this.body.userData.name;
+    }
+
+    updateFade(timeStep: number) {
+        this.opacity = Math.max(this.opacity - timeStep / birdConfig.fadeOutDuration, 0);
     }
 
     destroy() {

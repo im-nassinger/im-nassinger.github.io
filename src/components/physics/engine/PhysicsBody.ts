@@ -37,6 +37,9 @@ export class PhysicsBody {
     type: BodyType;
     position: Vector = { x: 0, y: 0 };
     angle = 0;
+    // where the body was created, so it can be put back there.
+    readonly initialPosition: Vector;
+    readonly initialAngle: number;
     // box2d units per meter, see PhysicsWorld.
     readonly lengthScale: number;
     isCollisionEnabled = true;
@@ -50,10 +53,20 @@ export class PhysicsBody {
         this.lengthScale = lengthScale;
 
         this.syncTransform();
+
+        this.initialPosition = { ...this.position };
+        this.initialAngle = this.angle;
     }
 
     get isDestroyed() {
         return this.destroyed;
+    }
+
+    // box2d puts a body to sleep once it has been resting for a moment.
+    isAwake() {
+        if (this.destroyed) return false;
+
+        return this.box2d.b2Body_IsAwake(this.id);
     }
 
     // Called by the world once the underlying box2d body no longer exists.
@@ -99,6 +112,13 @@ export class PhysicsBody {
         b2Body_SetLinearVelocity(this.id, box2DVelocity);
 
         box2DVelocity.delete();
+    }
+
+    // in radians per second.
+    setAngularVelocity(angularVelocity: number) {
+        if (this.destroyed) return;
+
+        this.box2d.b2Body_SetAngularVelocity(this.id, angularVelocity);
     }
 
     getLinearVelocity() {

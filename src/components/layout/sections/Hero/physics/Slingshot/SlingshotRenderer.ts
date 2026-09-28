@@ -34,9 +34,7 @@ export class SlingshotRenderer {
 
         this.drawBackLayer(ctx, band, holderPosition);
 
-        for (const bird of scene.birds) {
-            this.drawSprite(ctx, this.sprites[bird.sprite], bird.body.position, bird.body.angle);
-        }
+        for (const bird of scene.birds) this.drawBird(ctx, bird);
 
         this.drawFrontLayer(ctx, band, holderPosition);
 
@@ -118,6 +116,13 @@ export class SlingshotRenderer {
             ctx.fillStyle = `rgba(255, 255, 255, ${alpha * fade})`;
             ctx.fill();
         }
+    }
+
+    private drawBird(ctx: CanvasRenderingContext2D, bird: SlingshotBird) {
+        ctx.save();
+        ctx.globalAlpha = bird.opacity;
+        this.drawSprite(ctx, this.sprites[bird.sprite], bird.body.position, bird.body.angle);
+        ctx.restore();
     }
 
     // places the sprite's pivot on `position`, rotated around the pivot.

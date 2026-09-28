@@ -41,8 +41,13 @@ export class EasyMouseJoint {
         return body.userData.name || null;
     }
 
+    // kinematic bodies follow a scripted path, so the pointer leaves them alone.
+    isGrabbable(body: PhysicsBody) {
+        return !!this.getBodyName(body) && body.type !== 'kinematic';
+    }
+
     getBodyAt(position: Vector) {
-        return this.world.findBodyAt(position, (body) => !!this.getBodyName(body));
+        return this.world.findBodyAt(position, (body) => this.isGrabbable(body));
     }
 
     setHoveringBody(body: PhysicsBody | null) {
@@ -120,7 +125,7 @@ export class EasyMouseJoint {
         if (hoveredBody.type !== 'static') return;
 
         for (const body of this.world.bodies) {
-            if (!this.getBodyName(body)) continue;
+            if (!this.isGrabbable(body)) continue;
 
             body.setType('dynamic');
         }
